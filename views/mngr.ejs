@@ -1,0 +1,36 @@
+<html lang="en">
+    <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+    crossorigin="anonymous"
+  />
+    <%- include('./partials/head.ejs') %>
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <div  class="movies content">
+                <h1 style="text-align: center;padding-top: 1rem;padding-bottom: 1rem;">Management Alterations To The Films Database</h1>
+                <table style="text-align: center;" class="table table-striped">
+                    <thead>
+                      <tr >
+                        <th scope="col">Movie Info</th>
+                        <th style="padding-right: 8rem;" scope="col">Edit Options</th>
+                      </tr>
+                    </thead>
+                    <tbody >
+                    <% if (theMovies.length > 0) { %>
+                        <% theMovies.forEach(moviesList => { %>
+                            <tr >
+                                <td><%= moviesList.title %> <%= moviesList.genres %> <%= moviesList.rated %> <%= moviesList.year %></b></td>
+                                <td style="padding-right: 8rem;"><a href="/mngr/<%=moviesList._id%>/edit?genres=<%=moviesList.genres%>&title=<%=moviesList.title%>&rated=<%=moviesList.rated%>&year=<%=moviesList.year%>">Edit / </a>
+                                    <a href="/mngr/<%=moviesList._id%>/delete?title=<%=moviesList.title%>&year=<%=moviesList.year%>"> Delete / </a>
+                                    <a href="/mngr/<%=moviesList._id%>/replace?title=<%=moviesList.title%>&genres=<%=moviesList.genres%>&rated=<%=moviesList.rated%>&year=<%=moviesList.year%>"> Replace</a></td>    
+                                    <% }) %>
+                                    <% } %>
+                                </tr>
+                            </tbody>
+                          </table>
+        </div>
+    </body>
+    <%- include('./partials/foot.ejs') %>
+</html>

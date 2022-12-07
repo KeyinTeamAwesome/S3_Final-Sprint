@@ -1,0 +1,74 @@
+<html lang="en">
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+    crossorigin="anonymous"
+  />
+  <%- include('./partials/head.ejs') %>
+  <body>
+    <%- include('./partials/nav.ejs') %>
+    <div style="text-align: center; margin-top: 1rem" class="form-group">
+      <form action="/mngr/<%= locals.id %>?_method=PATCH" method="POST">
+        <label
+          class="form-group"
+          style="text-align: center; padding-left: 2.6rem; font-weight: bold"
+          ><u>Edit Movie Attributes</u></label
+        ><br />
+        <ul style="list-style: none">
+          <li>
+            <label style="font-weight: bold">
+              Title
+              <input
+                class="form-control"
+                type="text"
+                name="title"
+                value="<%= locals.title %>"
+                required
+              />
+            </label>
+          </li>
+          <li>
+            <label style="font-weight: bold"
+              >Genres
+              <input
+                class="form-control"
+                type="text"
+                name="genres"
+                value="<%= locals.genres %>"
+                required
+              />
+            </label>
+          </li>
+          <li>
+            <label style="font-weight: bold"
+              >Rating
+              <input
+                class="form-control"
+                type="text"
+                name="rated"
+                value="<%= locals.rated %>"
+                required
+              />
+            </label>
+          </li>
+          <li>
+            <label style="font-weight: bold"
+              >Year
+              <input
+                class="form-control"
+                type="text"
+                name="year"
+                value="<%= locals.year %>"
+                required
+              />
+            </label>
+          </li>
+          <br />
+          <button>PATCH</button>
+        </ul>
+      </form>
+    </div>
+  </body>
+  <%- include('./partials/foot.ejs') %>
+</html>

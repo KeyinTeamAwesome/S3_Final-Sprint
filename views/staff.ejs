@@ -1,0 +1,69 @@
+<html lang="en">
+    <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+    crossorigin="anonymous"
+  />
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <b><h1 style="text-align: center;padding-top: 1rem;">Staff Members Please Add New Movies To the Database</h1><b><br> 
+        <div style="text-align: center;" class="form-group"> 
+            <form action="/staff" method="POST">              
+                <label class="form-group" style="text-align: center;padding-left: 2.6rem;"><u>Add New Movie</u></label><br>
+                <ul style="list-style: none;" >
+                    <li>
+                        <label>Movie Genres
+                            <input class="form-control" placeholder="Genre Type" type="text" id="genres" name="genres" value="<%= locals.genres %>" required>
+                        </label>
+                    </li>
+                    <li>
+                        <label>Movie Title
+                            <input class="form-control" placeholder="Movie Title" type="text" id="title" name="title" value="<%= locals.title %>" required>
+                        </label>
+                    </li>
+                    <li>
+                        <label>Movie Rating
+                            <input class="form-control" placeholder="G / PG / PG-13 / R / NR" type="text" id="rated" name="rated" value="<%= locals.rated %>" required>
+                        </label>
+                    </li>
+                    <li>
+                        <label>Release Year
+                            <input class="form-control" placeholder="Year Released" type="text" id="year" name="year" value="<%= locals.year %>" required>
+                        </label>
+                    </li>
+                <br>
+                <button>POST</button>
+                <!-- < % if (locals.message){ %>
+                    <p class="success">< %=locals.message %></p>
+                < % } %> -->
+                </ul>
+            </form>
+         </div>
+        <h3 style="margin-left: 2rem;">List of All Movies: </h3>
+                        <table style="text-align: center;" class="table table-striped">
+                            <thead style="text-align: center;">
+                              <tr style="text-align: center;">
+                                <th scope="col">Title</th>
+                                <th scope="col">Genres</th>
+                                <th scope="col">Rating</th>
+                                <th scope="col">Release Year</th>
+                              </tr>
+                            </thead>
+                            <tbody >
+                                <% if (theMovies.length > 0) { %>
+                                    <% theMovies.reverse().forEach(moviesList => { %>
+                              <tr >
+                                <td><%= `${moviesList.title}` %></td>
+                                <td><%= `${moviesList.genres}` %></td>
+                                <td><%= `${moviesList.rated}` %></td>
+                                <td><%= `${moviesList.year}` %></td>     
+                                <% }) %>
+                                <% } %>
+                              </tr>
+                            </tbody>
+                          </table>
+        </div>
+    </body>
+    <%- include('./partials/foot.ejs') %>
+</html>
