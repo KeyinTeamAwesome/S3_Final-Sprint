@@ -1,45 +1,26 @@
 <html lang="en">
-  <link
-    rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-    crossorigin="anonymous"
-  />
-  <%- include('./partials/head.ejs') %>
-  <body>
-    <%- include('./partials/nav.ejs') %>
-    <div class="text-center" style="text-align: center">
-      <h1 class="mt-4">Welcome To Purple Monkey DVD Rental Main Page</h1>
-      <ul style="list-style-type: none">
-        <li>
-          <h1 class="index_li"></h1>
-          Test 1 - A customer can see a web page listing all the movies from the
-          moviesList collection in the dvd database.
-        </li>
-        <li>
-          <h1 class="index_li"></h1>
-          Test 2 - A business partner will be able to fetch all the movies from
-          the moviesList collection in the dvd database from a REST API. The
-          records will be returned as json data.
-        </li>
-        <li>
-          <h1 class="index_li"></h1>
-          Test 3 - Staff members can see a web page that will allow adding of a
-          new item to the moviesList collection of the dvd database.
-        </li>
-        <li>
-          <h1 class="index_li"></h1>
-          Test 4 - Managment can PUT new entries overwriting an existing entry,
-          PATCH updating 1 or more attributes (if available), and DELETE an
-          entery in the moviesList collections of the dvd database.
-        </li>
-      </ul>
-      <img
-        src="https://images.unsplash.com/photo-1581905764498-f1b60bae941a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
-        style="height: 65%; width: 60%"
-        alt="Movie Listings"
-      />
-    </div>
-  </body>
-  <%- include('./partials/foot.ejs') %>
+	<%- include('./partials/head.ejs') %>
+	<body>
+		<%- include('./partials/nav.ejs') %>
+		<div id="home-content">
+			<h1>Welcome to MoviesDB</h1>
+			<div id="home-buttons">
+				<div id="login-signup-buttons">
+					<form action="/login">
+						<input type="submit" value="Login" />
+					</form>
+					<form action="/signup">
+						<input type="submit" value="Sign Up" />
+					</form>
+				</div>
+				<!--  Using ejs we can either hide this unless they're logged in, or change the action to the login page if they're not already logged in -->
+				<div id="search-button">
+					<form action="/search">
+						<input type="submit" value="Search" />
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+	<%- include('./partials/foot.ejs') %>
 </html>
