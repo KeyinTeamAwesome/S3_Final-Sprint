@@ -1,4 +1,4 @@
---PETER'S CODE
+--PETER'S CODE.
 
 DROP TABLE IF EXISTS public.award;
 
