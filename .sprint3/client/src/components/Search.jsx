@@ -2,23 +2,23 @@ import React, { useState } from "react";
 
 const Search = () => {
   const [query, setQuery] = useState({searchTerms: "", database: "mongo"});
-
+  const [movies, setMovies] = useState([])
   
     const handleSubmit = async (event) => {
         console.log(query)
 
         event.preventDefault();
-        const jsonQuery = JSON.stringify({ query })
-        // Send a fetch request with the POST method
+        const jsonQuery = JSON.stringify({searchTerms: query.searchTerms, database: query.database })
         await fetch("http://localhost:3500/movies", {
             method: "POST",
             headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-        body: jsonQuery,
-        })
-        // .then((response) => console.log(response))
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: jsonQuery,
+            })
+        .then((response) => response.json())
+        .then((response)=>console.log(response))
     }
 
 

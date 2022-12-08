@@ -1,13 +1,12 @@
 const Query = require("../model/Query");
+const getMovies = require("./moviesController");
 
 const saveQuery = async(req, res) => {
     console.log(req.body)
-    const query = req.body
-
     try{
         const result = await Query.create({
-            userId: req.body.userId,
-            searchTerm: req.body.searchTerm
+            searchTerms: req.body.searchTerms,
+            database: req.body.database
         });
         res.status(201).json(result);
     } catch (err) {

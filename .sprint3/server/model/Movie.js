@@ -4,9 +4,9 @@ const Schema = mongoose.Schema;
 const movieSchema = new Schema({
   id: {
     type: Number,
-    default: 0,
+    require: true,
   },
-  movie: {
+  title: {
     type: String,
     require: true,
   },
@@ -16,7 +16,7 @@ const movieSchema = new Schema({
   },
   year: {
     type: Number,
-    default: 0,
+    require: true,
   }
 });
 

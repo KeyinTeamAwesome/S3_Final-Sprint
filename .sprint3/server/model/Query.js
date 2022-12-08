@@ -2,13 +2,13 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const querySchema = new Schema({
-  userID: {
-    type: Number,
-    default: 0,
-  },
-  searchTerm: {
+  searchTerms: {
     type: String,
-    default: 0,
+    require: true,
+  },
+  database: {
+    type: String,
+    require: true,
   },
 });
 
