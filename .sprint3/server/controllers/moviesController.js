@@ -4,14 +4,17 @@ const Movie = require("../model/Movie");
 const getMovies = async (req, res) => {
   console.log(req.body.searchTerms)
     try {
-      let result = await Movie.find({title: req.body.searchTerms});
+      let result = await Movie.find({
+        $or: [
+          { title: { $regex: req.body.searchTerms, $options: "i" } },
+          { genre: { $regex: req.body.searchTerms, $options: "i" } },
+        ],
+      });
       console.log(result)
-      res.json(result)
+      res.json(result);
     } catch (err) {
       console.log(err);
     }
   };
-
-
 
 module.exports = { getMovies };

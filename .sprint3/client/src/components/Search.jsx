@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Results from "./Results.jsx";
 
 const Search = () => {
   const [query, setQuery] = useState({searchTerms: "", database: "mongo"});
@@ -6,7 +7,6 @@ const Search = () => {
   
     const handleSubmit = async (event) => {
         console.log(query)
-
         event.preventDefault();
         const jsonQuery = JSON.stringify({searchTerms: query.searchTerms, database: query.database })
         await fetch("http://localhost:3500/movies", {
