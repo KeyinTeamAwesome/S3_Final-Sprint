@@ -1,0 +1,18 @@
+.App {
+  text-align: center;
+}
+
+.search{
+  display: flex;
+  justify-content: right;
+  margin: 25%;
+  width: 50%;
+  padding: 10px;
+  border: 2px solid black;
+
+;
+}
+
+select{
+align-items: right;;
+}
