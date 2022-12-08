@@ -3,11 +3,13 @@ import Results from "./Results.jsx";
 
 const Search = () => {
   const [query, setQuery] = useState({searchTerms: "", database: "mongo"});
-  const [movies, setMovies] = useState([])
+  const [results, setResults] = useState([])
+  const [running, setRunning] = useState(false)
   
     const handleSubmit = async (event) => {
         console.log(query)
         event.preventDefault();
+        setRunning(true)
         const jsonQuery = JSON.stringify({searchTerms: query.searchTerms, database: query.database })
         await fetch("http://localhost:3500/movies", {
             method: "POST",
@@ -18,11 +20,13 @@ const Search = () => {
             body: jsonQuery,
             })
         .then((response) => response.json())
+        .then((response) => setResults(response), console.log(results))
         .then((response)=>console.log(response))
     }
 
 
     return (
+    <>
     <div className = "search">
         <form onSubmit={handleSubmit}>
         <label>
@@ -47,6 +51,8 @@ const Search = () => {
         <input type="submit" value="Search" />
         </form>
     </div>
+    {running ? <Results results={results} /> : null}
+    </>
   );
 };
 

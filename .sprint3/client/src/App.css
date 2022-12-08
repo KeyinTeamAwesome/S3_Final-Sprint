@@ -5,12 +5,24 @@
 .search{
   display: flex;
   justify-content: right;
-  margin: 25%;
+  margin: 25% 0 0 25%;
   width: 50%;
   padding: 10px;
   border: 2px solid black;
+}
 
-;
+.result-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  margin: 25% 0 0 25%;
+  width: 50%;
+  padding: 10px;
+}
+
+.result{
+  border: 2px solid gold;
+  background: blanchedalmond
 }
 
 select{
