@@ -21,7 +21,6 @@ const Search = () => {
             })
         .then((response) => response.json())
         .then((response) => setResults(response), console.log(results))
-        .then((response)=>console.log(response))
     }
 
 
