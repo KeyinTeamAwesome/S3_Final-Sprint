@@ -30,21 +30,28 @@ footer {
 	width: 100%;
 }
 
-/* ******************************** Main DIVs ******************************* */
-#home-content {
+/* ****************************** Shared Style ****************************** */
+#content {
 	margin: 12% auto;
 	max-width: 700px;
 }
-
-#home-buttons {
-	margin: 40px auto;
-	max-width: 280px;
+#content h1 {
+	margin-bottom: 40px;
 }
-
-#home-buttons input {
+#content input[type="submit"] {
 	font-weight: bold;
 }
 
+/* ******************************* Index Page ******************************* */
+#home-buttons {
+	margin: 0 auto;
+	max-width: 280px;
+}
+#home-buttons input[type="submit"] {
+	border: 2px solid black;
+	border-radius: 8px;
+	box-shadow: rgb(177, 177, 177) 0px 4px 4px;
+}
 #login-signup-buttons {
 	display: flex;
 	justify-content: space-between;
@@ -53,8 +60,6 @@ footer {
 #login-signup-buttons input {
 	background-color: white;
 	border-color: black;
-	border-radius: 8px;
-	box-shadow: rgb(177, 177, 177) 0px 4px 8px;
 	color: black;
 	height: 32px;
 	min-width: 124px;
@@ -62,21 +67,30 @@ footer {
 
 #search-button input {
 	background-color: black;
-	border-radius: 8px;
-	box-shadow: rgb(177, 177, 177) 0px 4px 8px;
+
 	color: white;
 	height: 32px;
 	width: 100%;
 }
-
-.films {
-	width: 100%;
+/* ******************************* Search Page ****************************** */
+#search-form {
+	display: flex;
 }
-
-.modify {
-	max-width: 400px;
+#search-form input,
+#search-form select {
+	border: 2px solid black;
+	border-radius: 8px;
+	box-shadow: rgb(177, 177, 177) 0px 4px 4px;
+	height: 32px;
+	padding: 0 8px;
 }
-
+#search-form input[type="text"] {
+	width: 240px;
+}
+#search-form input[type="submit"] {
+	background-color: black;
+	color: white;
+}
 /* *********************************** Nav ********************************** */
 
 nav {
@@ -136,7 +150,7 @@ td {
 }
 /* ********************************** Input ********************************* */
 
-label {
+/* label {
 	font-weight: bold;
 	text-transform: capitalize;
 }
@@ -153,4 +167,4 @@ button {
 }
 #post-button {
 	width: 90%;
-}
+} */
