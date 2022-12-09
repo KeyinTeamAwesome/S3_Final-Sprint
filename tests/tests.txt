@@ -1,7 +1,0 @@
-Test 1 - A customer can see a web page listing all the movies from the moviesList collection in the dvd database.
-
-Test 2 - A business partner will be able to fetch all the movies from the moviesList collection in the dvd database from a REST API. The records will be returned as json data.
-
-Test 3 - Staff members can see a web page that will allow adding of a new item to the moviesList collection of the dvd database.
-
-Test 4 - Managment can PUT new entries overwriting an existing entry, PATCH updating 1 or more attributes (if available), and DELETE an entery in the moviesList collections of the dvd database.
