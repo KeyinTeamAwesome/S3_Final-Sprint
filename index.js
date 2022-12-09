@@ -17,26 +17,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 app.get("/", (req, res) => {
-  res.render("index.ejs", { name: "David Turner" });
+	res.render("index.ejs", { name: "David Turner" });
 });
 
-const moviesRouter = require("./routes/movies");
-app.use("/movies", moviesRouter);
+// const moviesRouter = require("./routes/movies");
+// app.use("/movies", moviesRouter);
 
-const staffRouter = require("./routes/staff");
-app.use("/staff", staffRouter);
+// const staffRouter = require("./routes/staff");
+// app.use("/staff", staffRouter);
 
-const mngrRouter = require("./routes/mngr");
-app.use("/mngr", mngrRouter);
+// const mngrRouter = require("./routes/mngr");
+// app.use("/mngr", mngrRouter);
+
+const searchRouter = require("./routes/search");
+app.use("/search", searchRouter);
 
 // anything beginning with "/api" will go into this
-const apiRouter = require("./routes/api/movies");
-app.use("/api/movies", apiRouter);
+// const apiRouter = require("./routes/api/movies");
+// app.use("/api/movies", apiRouter);
 
 app.use((req, res) => {
-  res.status(404).render("404");
+	res.status(404).render("404");
 });
 
 app.listen(PORT, () => {
-  console.log(`Simple app running on port ${PORT}.`);
+	console.log(`Simple app running on port ${PORT}.`);
 });
