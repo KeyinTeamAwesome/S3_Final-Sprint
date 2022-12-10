@@ -7,6 +7,9 @@
 
 const express = require("express");
 const methodOverride = require("method-override");
+const passport = require("passport");
+const flash = require("express-flash");
+const session = require("express-session");
 const app = express();
 const PORT = 3010;
 
@@ -16,30 +19,32 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
-app.get("/", (req, res) => {
-	res.render("index.ejs", { name: "David Turner" });
+// Added from passport tutorial in lecture, includes .use passport
+app.use(flash());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get("/", checkAuthenticated, async (req, res) => {
+  res.render("home.ejs");
 });
 
-// const moviesRouter = require("./routes/movies");
-// app.use("/movies", moviesRouter);
-
-// const staffRouter = require("./routes/staff");
-// app.use("/staff", staffRouter);
-
-// const mngrRouter = require("./routes/mngr");
-// app.use("/mngr", mngrRouter);
-
 const searchRouter = require("./routes/search");
-app.use("/search", searchRouter);
+app.use("/search", searchRouter, checkAuthenticated);
 
-// anything beginning with "/api" will go into this
-// const apiRouter = require("./routes/api/movies");
-// app.use("/api/movies", apiRouter);
+const usersRouter = require("./routes/users");
+app.use("/users", usersRouter, checkAuthenticated);
 
 app.use((req, res) => {
-	res.status(404).render("404");
+  res.status(404).render("404");
 });
 
 app.listen(PORT, () => {
-	console.log(`Simple app running on port ${PORT}.`);
+  console.log(`Simple app running on port ${PORT}.`);
 });
