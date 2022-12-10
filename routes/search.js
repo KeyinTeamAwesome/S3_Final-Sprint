@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-// const actorsDal = require("../services/m.movies.dal");
+const searchDal = require("../services/search.dal");
 
 // This will bring in the "fs" or file structure global object no npm install required
 const fs = require("fs");
@@ -48,21 +48,16 @@ router.get("/", async (req, res, next) => {
 
 router.get("/", async (req, res) => {
 	if (DEBUG) console.log("/search/ Next test: ", req.query);
-	// // Data Example:
-	// // [
-	// // 		{ "title": "Dazed Punk", "release_year": 2003, "rating": "PG-13" },
-	// // 		{ "title": "Airplane Sierra", "release_year": 2007, "rating": "PG-13" },
-	// // 		{ "title": "Dirty Ace", "release_year": 2002, "rating": "R" },
-	// // ];
-	// if (!req.query.searchTerm) {
-	// 	try {
-	// 		res.render("search.ejs");
-	// 	} catch {
-	// 		res.render("503");
-	// 	}
-	// } else {
-	// 	next();
-	// }
+
+	let movies = await searchDal.getMovies(
+		req.query.searchTerm,
+		req.query.database
+	);
+	try {
+		res.render("results.ejs");
+	} catch {
+		res.render("503");
+	}
 });
 
 // router.get("/", async (req, res) => {
