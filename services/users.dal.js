@@ -1,4 +1,4 @@
-const dal = require("mdb");
+const dal = require("./mdb");
 const { ObjectId } = require("mongodb");
 
 // Function used when registering new user
@@ -8,6 +8,17 @@ async function addUser(user) {
     await dal.db("sprint2").collection("movies").insertOne(user);
   } catch (error) {
     console.error(error);
+  }
+}
+
+async function addUser(user) {
+  if (DEBUG) console.log("films.mongo.dal.addFilm()");
+  try {
+    await dal.connect();
+    const result = await dal.db("sprint2").collection("users").insertOne(user);
+    return result;
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -59,32 +70,8 @@ async function getUserById(id) {
   }
 }
 
-// Middleware functions to allow/block access to routes
-
-// Used to block unathunticated users (app content e.g. homepage)
-// function checkAuthenticated(req, res, next) {
-//   // If user is authenticated this will allow request
-//   if (req.isAuthenticated()) {
-//     return next();
-//   }
-//   // If user is not authenticated re-route to login
-//   res.redirect("/users/login");
-// }
-//MAY NOT NEED
-// Used to block athunticated users (e.g. login, register)
-// function checkNotAuthenticated(req, res, next) {
-//   // If user is authenticated re-route to homepage
-//   if (req.isAuthenticated()) {
-//     return res.redirect("/");
-//   }
-//   // If user is not authenticated allow request
-//   next();
-// }
-
 module.exports = {
   getUserByEmail,
   getUserById,
   addUser,
-  checkAuthenticated,
-  checkNotAuthenticated,
 };

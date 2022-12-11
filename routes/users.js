@@ -9,7 +9,7 @@ const dal = require("../services/users.dal");
 
 // Log In route
 router.get("/login", (req, res) => {
-  res.render("users/login");
+  res.render("/login");
 });
 
 // Submits login information to be authenticated
@@ -20,14 +20,14 @@ router.post(
   //check Peter's code for passport.authenticate
   passport.authenticate("local", {
     successRedirect: "/", //Do we want it to reroute to home each time?
-    failureRedirect: "/users/login",
+    failureRedirect: "/login",
     failureFlash: true,
   })
 );
 
 // Sign up Route
 router.get("/signup", checkNotAuthenticated, async (req, res) => {
-  res.render("users/signup");
+  res.render("/signup");
 });
 
 // Submits user information to be added to the database
@@ -45,18 +45,18 @@ router.post("/signup", checkNotAuthenticated, async (req, res) => {
     if (userCheck != null) {
       console.log("User already exists");
       req.flash("error", "User with this email already exists");
-      res.redirect("/users/login");
+      res.redirect("/login");
     } else {
       DEBUG && console.log("Registering User: " + user.name); //check function getUserByEmail to make sure variable names are right.
       addUser(user);
       DEBUG && console.log("User Added: " + user.name);
       req.flash("success", "User succesfully created");
-      res.redirect("/users/login");
+      res.redirect("/login");
     }
   } catch (error) {
     console.error(error);
     req.flash("error", "Oops! Something Went Wrong");
-    res.redirect("/users/signup");
+    res.redirect("/signup");
   }
 });
 

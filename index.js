@@ -18,7 +18,7 @@ passport.use(
   new localStrategy(
     { usernameField: "email" },
     async (email, password, done) => {
-      let user = await logins.getLoginByEmail(email);
+      let user = await logins.getUserByEmail(email);
       if (user == null) {
         return done(null, false, { message: "No user with that email." });
       }
@@ -97,7 +97,7 @@ app.get("/signup", checkNotAuthenticated, (req, res) => {
 app.post("/signup", checkNotAuthenticated, async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    let result = await logins.addLogin(
+    let result = await logins.addUser(
       req.body.name,
       req.body.email,
       hashedPassword,
