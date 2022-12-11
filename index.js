@@ -52,7 +52,7 @@ passport.deserializeUser(async (id, done) => {
 });
 
 app.set("view-engine", "ejs");
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true })); //THIS MAY BE TRUE OR FALSE??
 app.use(flash());
 app.use(
   session({
@@ -75,6 +75,9 @@ app.get("/", checkAuthenticated, (req, res) => {
 app.get("/search", checkAuthenticated, (req, res) => {
   res.render("search.ejs");
 });
+
+const userRouter = require("./routes/users");
+app.use("/users", userRouter);
 
 // Passport checkNotAuthenticated() middleware.
 // This middleware is only for the login and register. If someone stumbles

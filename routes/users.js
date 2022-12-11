@@ -1,104 +1,85 @@
 const express = require("express");
-const passport = require("passport");
 const bcrypt = require("bcrypt");
+const uuid = require("uuid");
 const router = express.Router();
-const dal = require("../services/users.dal");
 
-//We don't know if we need this:
-// router.use(express.static("public"));
+const { addLogin, getLoginByUsername } = require("../services/users.dal");
 
-// Log In route
-router.get("/login", (req, res) => {
-  res.render("/login");
+router.use(express.static("public"));
+
+router.get("/", async (req, res) => {
+  if (DEBUG) console.log("login page: ");
+  res.render("login", { status: req.app.locals.status });
 });
 
-// Submits login information to be authenticated
-router.post(
-  "/login",
-  checkNotAuthenticated,
-  // calls function from passport.js
-  //check Peter's code for passport.authenticate
-  passport.authenticate("local", {
-    successRedirect: "/", //Do we want it to reroute to home each time?
-    failureRedirect: "/login",
-    failureFlash: true,
-  })
-);
-
-// Sign up Route
-router.get("/signup", checkNotAuthenticated, async (req, res) => {
-  res.render("/signup");
-});
-
-// Submits user information to be added to the database
-router.post("/signup", checkNotAuthenticated, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    // encrypt password before storing in database
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    // object created to insert into database
-    const user = {
-      name: req.body.name,
-      email: req.body.email,
-      password: hashedPassword,
-    };
-    const userCheck = await getUserByEmail(user.email);
-    if (userCheck != null) {
-      console.log("User already exists");
-      req.flash("error", "User with this email already exists");
-      res.redirect("/login");
+    if (DEBUG) console.log("users.getLoginByUsername().try");
+    let user = await getLoginByUsername(req.body.username);
+    if (DEBUG) console.log(user);
+    if (user === undefined) {
+      req.app.locals.status = "Incorrect user name was entered.";
+      res.redirect("/users");
+    }
+    if (await bcrypt.compare(req.body.password, user.password)) {
+      // change using app.locals to use session or java web token (jwt)
+      req.app.locals.user = user;
+      req.app.locals.status = "Happy for your return " + user.username;
+      res.redirect("/");
     } else {
-      DEBUG && console.log("Registering User: " + user.name); //check function getUserByEmail to make sure variable names are right.
-      addUser(user);
-      DEBUG && console.log("User Added: " + user.name);
-      req.flash("success", "User succesfully created");
-      res.redirect("/login");
+      req.app.locals.status = "Incorrect password was entered.";
+      res.redirect("/users");
     }
   } catch (error) {
-    console.error(error);
-    req.flash("error", "Oops! Something Went Wrong");
-    res.redirect("/signup");
+    console.log(error);
+    if (DEBUG)
+      console.log("users.getLoginByUsername().catch: " + user.username);
+    res.render("503");
+    // log this error to an error log file.
   }
 });
 
-// //I DON'T THINK WE NEED THIS -KB
-// // Route to User Account page
-// router.get("/profile", checkAuthenticated, async (req, res) => {
-//   res.render("auth/profile", { title: "My Profile" });
-// });
+// from http browser it has /auth/new
+router.get("/new", async (req, res) => {
+  res.render("register", { status: req.app.locals.status });
+});
 
-// // Submits a request to delete user from database
-// router.post("/profile", checkAuthenticated, async (req, res) => {
-//   console.log("Unsubscribing..." + user.name);
-//   try {
-//     await deleteUser(user.email);
-//     req.logout(function (err) {
-//       if (err) {
-//         return next(err);
-//       }
-//       req.flash("success", "Successfully Unsubscribed");
-//       profileIcon = null;
-//       user = null;
-//       res.redirect("/auth/login");
-//     });
-//   } catch (error) {
-//     req.flash("error2", "Oops, Something went wrong");
-//     console.error(error);
-//     res.redirect("/auth/profile");
-//   }
-// });
+router.post("/new", async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    if (req.body.email && req.body.username && req.body.password) {
+      var result = await addLogin(
+        req.body.username,
+        req.body.email,
+        hashedPassword,
+        uuid.v4()
+      );
+      if (DEBUG) console.log("result: " + result);
+      // duplicate username, comes from uniqueness constraint
+      // in postgresql(err.code=23505) OR mongodb(err.code=11000)
+      if (result === "23505" || result === 11000) {
+        if (DEBUG) console.log("Username already exists, please try another.");
+        req.app.locals.status = "Username already exists, please try another.";
+        res.redirect("/users/new");
+      } else {
+        req.app.locals.status = "New account created, please login.";
+        res.redirect("/users");
+      }
+    } else {
+      if (DEBUG) console.log("Not enough form fields completed.");
+      req.app.locals.status = "Not enough form fields completed.";
+      res.redirect("/users/new");
+    }
+  } catch (error) {
+    console.log(error);
+    res.render("503");
+    // log this error to an error log file.
+  }
+});
 
-// // Route to call function to log out user
-// router.delete("/logout", (req, res, next) => {
-//   DEBUG && console.log("logout initialized");
-
-//   req.logout(function (error) {
-//     if (error) {
-//       return next(error);
-//     }
-//     profileIcon = null;
-//     user = null;
-//     res.redirect("/auth/login");
-//   });
-// });
+router.get("/exit", async (req, res) => {
+  if (DEBUG) console.log("get /exit");
+  res.redirect("/");
+});
 
 module.exports = router;
