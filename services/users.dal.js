@@ -3,8 +3,9 @@ const { ObjectId } = require("mongodb");
 
 // Function used when registering new user
 async function addUser(user) {
+  //where is this user coming from?
   try {
-    await userCollection.insertOne(user);
+    await dal.db("sprint2").collection("movies").insertOne(user);
   } catch (error) {
     console.error(error);
   }

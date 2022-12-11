@@ -44,8 +44,8 @@ async function addMovie(genres, title, rated, year) {
   try {
     await dal.connect();
     const result = await dal
-      .db("sample_mflix")
-      .collection("moviesList")
+      .db("sprint2")
+      .collection("movies")
       .insertOne(newLogin);
     return result.insertedId;
   } catch (error) {
