@@ -37,30 +37,25 @@ router.post("/signup", checkNotAuthenticated, async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     // object created to insert into database
     const user = {
-      //This is where the user variable is created. Should this be here?? Where is add user called?
-
       name: req.body.name,
       email: req.body.email,
       password: hashedPassword,
     };
-
-    //ENDED HERE DEC 9 KB & DT
-    // Check to see if user already exists
-    const userCheck = await getUserByEmail(user.email); //is this the right thing? user.email?
+    const userCheck = await getUserByEmail(user.email);
     if (userCheck != null) {
       console.log("User already exists");
       req.flash("error", "User with this email already exists");
-      res.redirect("/auth/register");
+      res.redirect("/users/login");
     } else {
       DEBUG && console.log("Registering User: " + user.name); //check function getUserByEmail to make sure variable names are right.
       addUser(user);
-      DEBUG && console.log("Registered User: " + user.name);
+      DEBUG && console.log("User Added: " + user.name);
       req.flash("success", "User succesfully created");
       res.redirect("/users/login");
     }
   } catch (error) {
     console.error(error);
-    req.flash("error", "Oops, Something went wrong");
+    req.flash("error", "Oops! Something Went Wrong");
     res.redirect("/users/signup");
   }
 });
