@@ -19,7 +19,7 @@ router.post(
   // calls function from passport.js
   //check Peter's code for passport.authenticate
   passport.authenticate("local", {
-    successRedirect: "/",
+    successRedirect: "/", //Do we want it to reroute to home each time?
     failureRedirect: "/users/login",
     failureFlash: true,
   })
@@ -27,7 +27,7 @@ router.post(
 
 // Sign up Route
 router.get("/signup", checkNotAuthenticated, async (req, res) => {
-  res.render("users/signup", { title: "Sign Up" });
+  res.render("users/signup");
 });
 
 // Submits user information to be added to the database
@@ -37,32 +37,31 @@ router.post("/signup", checkNotAuthenticated, async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     // object created to insert into database
     const user = {
+      //This is where the user variable is created. Should this be here?? Where is add user called?
+
       name: req.body.name,
       email: req.body.email,
       password: hashedPassword,
-      phone: null,
-      favorite_genre: null,
-      image: null,
     };
 
     //ENDED HERE DEC 9 KB & DT
     // Check to see if user already exists
-    const userCheck = await getUserByEmail(user.email);
+    const userCheck = await getUserByEmail(user.email); //is this the right thing? user.email?
     if (userCheck != null) {
       console.log("User already exists");
       req.flash("error", "User with this email already exists");
       res.redirect("/auth/register");
     } else {
-      DEBUG && console.log("Registering User: " + user.name);
+      DEBUG && console.log("Registering User: " + user.name); //check function getUserByEmail to make sure variable names are right.
       addUser(user);
       DEBUG && console.log("Registered User: " + user.name);
       req.flash("success", "User succesfully created");
-      res.redirect("/auth/login");
+      res.redirect("/users/login");
     }
   } catch (error) {
     console.error(error);
     req.flash("error", "Oops, Something went wrong");
-    res.redirect("/auth/register");
+    res.redirect("/users/signup");
   }
 });
 
