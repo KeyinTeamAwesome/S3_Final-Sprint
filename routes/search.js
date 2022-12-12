@@ -48,13 +48,24 @@ router.get("/", async (req, res, next) => {
 
 router.get("/", async (req, res) => {
 	if (DEBUG) console.log("/search/ Next test: ", req.query);
-
-	let movies = await searchDal.getMovies(
-		req.query.searchTerm,
-		req.query.database
-	);
 	try {
-		res.render("results.ejs");
+		console.log("req.body", req.body);
+		let movies = await searchDal.getMovies(
+			req.query.searchTerm,
+			req.query.database
+		);
+
+		// Error handling for ejs errors caused by results from an invalid search, for instance
+		// if someone manually types in a url query param of a database that does not exist, or
+		// any other possible query params that cannot be handled.
+		res.render("results.ejs", { movies }, function (err, html) {
+			if (err) {
+				console.log(err);
+				res.render("503");
+			} else {
+				res.send(html);
+			}
+		});
 	} catch {
 		res.render("503");
 	}
