@@ -17,52 +17,52 @@ const logEvents = require("./logEvents");
 // Creating an dot addListener or dot on function, it will have name "routes", this could be anything and functions below can have different names
 // to serve different purposes then there are in this case 3 parameters, event, level (ex: information, error), and a message that can be logged
 myEmitter.on("status", (msg, theStatusCode) => {
-	// once the above part of the listeners has exicuted its block
-	// the logEvents function in logEvents.js will fire and the parameters here will be sent over to be processed
-	logEvents(msg, theStatusCode);
+  // once the above part of the listeners has exicuted its block
+  // the logEvents function in logEvents.js will fire and the parameters here will be sent over to be processed
+  logEvents(msg, theStatusCode);
 });
 
 router.get("/", async (req, res, next) => {
-	if (DEBUG)
-		console.log(
-			"/search/ Initial Get: ",
-			req.query.searchTerm,
-			!req.query.searchTerm
-		);
-	// Data Example:
-	// [
-	// 		{ "title": "Dazed Punk", "release_year": 2003, "rating": "PG-13" },
-	// 		{ "title": "Airplane Sierra", "release_year": 2007, "rating": "PG-13" },
-	// 		{ "title": "Dirty Ace", "release_year": 2002, "rating": "R" },
-	// ];
-	if (!req.query.searchTerm) {
-		try {
-			res.render("search.ejs");
-		} catch {
-			res.render("503");
-		}
-	} else {
-		next();
-	}
+  if (DEBUG)
+    console.log(
+      "/search/ Initial Get: ",
+      req.query.searchTerm,
+      !req.query.searchTerm
+    );
+  // Data Example:
+  // [
+  // 		{ "title": "Dazed Punk", "release_year": 2003, "rating": "PG-13" },
+  // 		{ "title": "Airplane Sierra", "release_year": 2007, "rating": "PG-13" },
+  // 		{ "title": "Dirty Ace", "release_year": 2002, "rating": "R" },
+  // ];
+  if (!req.query.searchTerm) {
+    try {
+      res.render("search.ejs");
+    } catch {
+      res.render("503");
+    }
+  } else {
+    next();
+  }
 });
 
 router.get("/", async (req, res) => {
-	if (DEBUG) console.log("/search/ Next test: ", req.query);
-	// // Data Example:
-	// // [
-	// // 		{ "title": "Dazed Punk", "release_year": 2003, "rating": "PG-13" },
-	// // 		{ "title": "Airplane Sierra", "release_year": 2007, "rating": "PG-13" },
-	// // 		{ "title": "Dirty Ace", "release_year": 2002, "rating": "R" },
-	// // ];
-	// if (!req.query.searchTerm) {
-	// 	try {
-	// 		res.render("search.ejs");
-	// 	} catch {
-	// 		res.render("503");
-	// 	}
-	// } else {
-	// 	next();
-	// }
+  if (DEBUG) console.log("/search/ Next test: ", req.query);
+  // // Data Example:
+  // // [
+  // // 		{ "title": "Dazed Punk", "release_year": 2003, "rating": "PG-13" },
+  // // 		{ "title": "Airplane Sierra", "release_year": 2007, "rating": "PG-13" },
+  // // 		{ "title": "Dirty Ace", "release_year": 2002, "rating": "R" },
+  // // ];
+  // if (!req.query.searchTerm) {
+  // 	try {
+  // 		res.render("search.ejs");
+  // 	} catch {
+  // 		res.render("503");
+  // 	}
+  // } else {
+  // 	next();
+  // }
 });
 
 // router.get("/", async (req, res) => {
@@ -95,8 +95,8 @@ router.get("/", async (req, res) => {
 //   } catch {
 //     res.statusCode = 503;
 //     theStatusCode = res.statusCode;
-//     msg = "Status Code for GET by Id: ";
-//     myEmitter.emit("status", msg, theStatusCode);
+//     msg = "Status Code for GET by Id: ${term}";
+//     myEmitter.emit("status", msg, term);
 //     res.render("503");
 //   }
 // });
@@ -135,81 +135,81 @@ router.get("/", async (req, res) => {
 // });
 
 router.post("/", async (req, res) => {
-	if (DEBUG) console.log("movies.POST");
-	try {
-		await actorsDal.addMovie(
-			req.body.genres,
-			req.body.title,
-			req.body.rated,
-			req.body.year
-		);
-		res.redirect("/movies/");
-	} catch {
-		// log this error to an error log file.
-		res.statusCode = 503;
-		theStatusCode = res.statusCode;
-		msg = "Status Code for POST: ";
-		myEmitter.emit("status", msg, theStatusCode);
-		res.render("503");
-	}
+  if (DEBUG) console.log("movies.POST");
+  try {
+    await actorsDal.addMovie(
+      req.body.genres,
+      req.body.title,
+      req.body.rated,
+      req.body.year
+    );
+    res.redirect("/movies/");
+  } catch {
+    // log this error to an error log file.
+    res.statusCode = 503;
+    theStatusCode = res.statusCode;
+    msg = "Status Code for POST: ";
+    myEmitter.emit("status", msg, theStatusCode);
+    res.render("503");
+  }
 });
 
 // PUT, PATCH, and DELETE are part of HTTP, not a part of HTML
 // Therefore, <form method="PUT" ...> doesn't work, but it does work for RESTful API
 
 router.put("/:id", async (req, res) => {
-	if (DEBUG) console.log("movies.PUT: " + req.params.id);
-	try {
-		await actorsDal.putMovie(
-			req.params.id,
-			req.body.genres,
-			req.body.title,
-			req.body.rated,
-			req.body.year
-		);
-		res.redirect("/movies/");
-	} catch {
-		// log this error to an error log file.
-		res.statusCode = 503;
-		theStatusCode = res.statusCode;
-		msg = "Status Code for PUT by Id: ";
-		myEmitter.emit("status", msg, theStatusCode);
-		res.render("503");
-	}
+  if (DEBUG) console.log("movies.PUT: " + req.params.id);
+  try {
+    await actorsDal.putMovie(
+      req.params.id,
+      req.body.genres,
+      req.body.title,
+      req.body.rated,
+      req.body.year
+    );
+    res.redirect("/movies/");
+  } catch {
+    // log this error to an error log file.
+    res.statusCode = 503;
+    theStatusCode = res.statusCode;
+    msg = "Status Code for PUT by Id: ";
+    myEmitter.emit("status", msg, theStatusCode);
+    res.render("503");
+  }
 });
 router.patch("/:id", async (req, res) => {
-	if (DEBUG) console.log("movies.PATCH: " + req.params.id);
-	try {
-		await actorsDal.patchMovie(
-			req.params.id,
-			req.body.genres,
-			req.body.title,
-			req.body.rated,
-			req.body.year
-		);
-		res.redirect("/movies/");
-	} catch {
-		// log this error to an error log file.
-		res.statusCode = 503;
-		theStatusCode = res.statusCode;
-		msg = "Status Code for PATCH by Id: ";
-		myEmitter.emit("status", msg, theStatusCode);
-		res.render("503");
-	}
+  if (DEBUG) console.log("movies.PATCH: " + req.params.id);
+  try {
+    await actorsDal.patchMovie(
+      req.params.id,
+      req.body.genres,
+      req.body.title,
+      req.body.rated,
+      req.body.year
+    );
+    res.redirect("/movies/");
+  } catch {
+    // log this error to an error log file.
+    res.statusCode = 503;
+    theStatusCode = res.statusCode;
+    msg = "Status Code for PATCH by Id: ";
+    myEmitter.emit("status", msg, theStatusCode);
+    res.render("503");
+  }
 });
 router.delete("/:id", async (req, res) => {
-	if (DEBUG) console.log("movies.DELETE: " + req.params.id);
-	try {
-		await actorsDal.deleteMovie(req.params.id);
-		res.redirect("/movies/");
-	} catch {
-		// log this error to an error log file.
-		res.statusCode = 503;
-		theStatusCode = res.statusCode;
-		msg = "Status Code for DELETE by Id: ";
-		myEmitter.emit("status", msg, theStatusCode);
-		res.render("503");
-	}
+  if (DEBUG) console.log("movies.DELETE: " + req.params.id);
+  try {
+    await actorsDal.deleteMovie(req.params.id);
+    res.redirect("/movies/");
+  } catch {
+    // log this error to an error log file.
+    res.statusCode = 503;
+    theStatusCode = res.statusCode;
+    msg = "Status Code for DELETE by Id: ";
+    myEmitter.emit("status", msg, theStatusCode);
+    res.render("503");
+  }
 });
 
 module.exports = router;
