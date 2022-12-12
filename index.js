@@ -32,7 +32,7 @@ app.use(methodOverride("_method"));
 // Passport checkAuthenticated() middleware.
 // For every route we check the person is logged in. If not we send them
 // LOCALHOST STARTS HERE to the login page
-app.get("/", (req, res) => {
+app.get("/", pp.checkNotAuthenticated, (req, res) => {
 	res.render("index.ejs");
 	// res.render("index.ejs", { name: req.user.username });
 });
