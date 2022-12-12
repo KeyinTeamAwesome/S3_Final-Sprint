@@ -17,52 +17,52 @@ const logEvents = require("./logEvents");
 // Creating an dot addListener or dot on function, it will have name "routes", this could be anything and functions below can have different names
 // to serve different purposes then there are in this case 3 parameters, event, level (ex: information, error), and a message that can be logged
 myEmitter.on("status", (msg, theStatusCode) => {
-	// once the above part of the listeners has exicuted its block
-	// the logEvents function in logEvents.js will fire and the parameters here will be sent over to be processed
-	logEvents(msg, theStatusCode);
+  // once the above part of the listeners has exicuted its block
+  // the logEvents function in logEvents.js will fire and the parameters here will be sent over to be processed
+  logEvents(msg, theStatusCode);
 });
 
 router.get("/", async (req, res, next) => {
-	if (DEBUG)
-		console.log(
-			"/search/ Initial Get: ",
-			req.query.searchTerm,
-			!req.query.searchTerm
-		);
-	if (!req.query.searchTerm) {
-		try {
-			res.render("search.ejs");
-		} catch {
-			res.render("503");
-		}
-	} else {
-		next();
-	}
+  if (DEBUG)
+    console.log(
+      "/search/ Initial Get: ",
+      req.query.searchTerm,
+      !req.query.searchTerm
+    );
+  if (!req.query.searchTerm) {
+    try {
+      res.render("search.ejs");
+    } catch {
+      res.render("503");
+    }
+  } else {
+    next();
+  }
 });
 
 router.get("/", async (req, res) => {
-	if (DEBUG) console.log("/search/ Next: ", req.query);
-	try {
-		console.log("req.body", req.body);
-		let movies = await searchDal.getMovies(
-			req.query.searchTerm,
-			req.query.database
-		);
+  if (DEBUG) console.log("/search/ Next: ", req.query);
+  try {
+    console.log("req.body", req.body);
+    let movies = await searchDal.getMovies(
+      req.query.searchTerm,
+      req.query.database
+    );
 
-		// Error handling for ejs errors caused by results from an invalid search, for instance
-		// if someone manually types in a url query param of a database that does not exist, or
-		// any other possible query params that cannot be handled.
-		res.render("results.ejs", { movies }, function (err, html) {
-			if (err) {
-				console.log(err);
-				res.render("503");
-			} else {
-				res.send(html);
-			}
-		});
-	} catch {
-		res.render("503");
-	}
+    // Error handling for ejs errors caused by results from an invalid search, for instance
+    // if someone manually types in a url query param of a database that does not exist, or
+    // any other possible query params that cannot be handled.
+    res.render("results.ejs", { movies }, function (err, html) {
+      if (err) {
+        console.log(err);
+        res.render("503");
+      } else {
+        res.send(html);
+      }
+    });
+  } catch {
+    res.render("503");
+  }
 });
 
 // router.get("/", async (req, res) => {
