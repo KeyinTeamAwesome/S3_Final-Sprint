@@ -2,28 +2,35 @@
 	<%- include('./partials/head.ejs') %>
 	<body>
 		<%- include('./partials/nav.ejs') %>
-		<div class="films content">
-			<form action="/films" method="POST">
-				<table id="film-post-table">
-					<tr>
-						<th id="description-header" colspan="4">
-							<label>Movies</label>
-						</th>
-					</tr>
-					<tr>
-						<th class="category">Title</th>
-						<th class="category">Genre</th>
-						<th class="category">Year</th>
-					</tr>
-					<% if (movies.length > 0) { %> <% movies.forEach(movie => { %>
-					<tr>
-						<td><%= movie.title %></td>
-						<td style="text-align: center"><%= movie.genre %></td>
-						<td style="text-align: center"><%= movie.year %></td>
-					</tr>
-					<% }) %> <% } %>
-				</table>
-			</form>
+		<div id="results-content">
+			<%- include('./partials/searchform.ejs') %>
+			<!-- <form action="/films" method="POST"> -->
+			<table id="film-post-table">
+				<tr>
+					<th id="description-header" colspan="4">
+						<label>Search Results</label>
+					</th>
+				</tr>
+				<tr>
+					<th class="category">Title</th>
+					<th class="category">Genre</th>
+					<th class="category">Year</th>
+				</tr>
+				<% if (movies.length > 0) { %> <% movies.forEach(movie => { %>
+				<tr>
+					<td><%= movie.title %></td>
+					<td style="text-align: center"><%= movie.genre %></td>
+					<td style="text-align: center"><%= movie.year %></td>
+				</tr>
+				<% }) %> <% } else { %>
+				<tr>
+					<td colspan="3" style="text-align: center">
+						Sorry, no movies match your search.
+					</td>
+				</tr>
+				<%}%>
+			</table>
+			<!-- </form> -->
 		</div>
 	</body>
 	<%- include('./partials/foot.ejs') %>

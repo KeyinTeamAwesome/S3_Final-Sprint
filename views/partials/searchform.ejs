@@ -1,0 +1,16 @@
+<div id="search-form">
+	<form action="/search" method="GET">
+		<input
+			type="text"
+			name="searchTerm"
+			value=""
+			placeholder="&#x1F50D; Search by Title, Year, or Genre..."
+			required
+		/>
+		<select name="database" id="database">
+			<option value="mongodb">MongoDB</option>
+			<option value="postgresql">PostgreSQL</option>
+		</select>
+		<input type="submit" value="Search" />
+	</form>
+</div>

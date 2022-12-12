@@ -39,7 +39,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   let user = await logins.getLoginById(id);
   if (DEBUG) console.log("passport.deserializeUser: " + user);
-  return done(null, user);
+  done(null, user);
 });
 
 function checkAuthenticated(req, res, next) {
@@ -50,7 +50,7 @@ function checkAuthenticated(req, res, next) {
 }
 function checkNotAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    return res.redirect("/");
+    return res.redirect("/search");
   }
   return next();
 }

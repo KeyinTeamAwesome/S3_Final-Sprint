@@ -73,9 +73,10 @@ footer {
 	width: 100%;
 }
 /* ******************************* Search Page ****************************** */
-#search-form {
+/* #search-form {
 	display: flex;
-}
+	margin: 0 auto;
+} */
 #search-form input,
 #search-form select {
 	border: 2px solid black;
@@ -90,6 +91,11 @@ footer {
 #search-form input[type="submit"] {
 	background-color: black;
 	color: white;
+}
+
+/* ****************************** Results Page ****************************** */
+#results-content {
+	margin-top: 80px;
 }
 /* *********************************** Nav ********************************** */
 
