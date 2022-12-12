@@ -32,13 +32,13 @@ app.use(methodOverride("_method"));
 // Passport checkAuthenticated() middleware.
 // For every route we check the person is logged in. If not we send them
 // LOCALHOST STARTS HERE to the login page
-app.get("/", pp.checkAuthenticated, (req, res) => {
-	res.render("search.ejs", { name: req.user.username });
+app.get("/", (req, res) => {
+	res.render("index.ejs");
+	// res.render("index.ejs", { name: req.user.username });
 });
 
-app.get("/search", pp.checkAuthenticated, (req, res) => {
-	res.render("search.ejs");
-});
+const searchRouter = require("./routes/search");
+app.use("/search", searchRouter);
 
 const authRouter = require("./routes/auth");
 app.use("/auth", authRouter);
@@ -53,7 +53,7 @@ app.post(
 	"/login",
 	pp.checkNotAuthenticated,
 	passport.authenticate("local", {
-		successRedirect: "/",
+		successRedirect: "/search",
 		failureRedirect: "/login",
 		failureFlash: true,
 	})
