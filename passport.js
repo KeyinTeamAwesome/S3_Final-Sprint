@@ -39,7 +39,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   let user = await logins.getLoginById(id);
   if (DEBUG) console.log("passport.deserializeUser: " + user);
-  done(null, user);
+  return done(null, user);
 });
 
 function checkAuthenticated(req, res, next) {

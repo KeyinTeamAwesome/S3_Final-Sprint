@@ -10,6 +10,7 @@ async function getLogins() {
     console.log(error);
   }
 }
+
 async function getLoginByEmail(email) {
   try {
     await dal.connect();
@@ -24,6 +25,7 @@ async function getLoginByEmail(email) {
     console.log(error);
   }
 }
+
 async function getLoginById(id) {
   try {
     await dal.connect();

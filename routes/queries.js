@@ -25,7 +25,7 @@ const year = moment().year();
 // log events is promising to take the parameters from the emitter
 // listener in routes and send that data to the try / accept block
 // fileLineItem is the information that is written to the log file
-const queryEvents = async (msg, theDatabase) => {
+const queryEvents = async (msg) => {
   const fileLineItem = `${date} \t${time} \t${msg} \t${theDatabase} \t${uuid()}`;
 
   // try catch block is used to evaluate if 1 there is a filefolder to place the line item, if is does exit
@@ -34,7 +34,7 @@ const queryEvents = async (msg, theDatabase) => {
   // catch will handle any error that occurs if the try fails
 
   try {
-    if (theDatabase === "MongoDB") {
+    if (theDatabase === "mongodb") {
       //CHANGE THIS DEPENDING ON WHAT WE CALL IT
       if (!fs.existsSync(path.join(__dirname, `${month} ${year}_query_logs`))) {
         await fsPromises.mkdir(
@@ -46,7 +46,7 @@ const queryEvents = async (msg, theDatabase) => {
         path.join(__dirname, `${month} ${year}_query_logs`, fileName),
         fileLineItem + "\n"
       );
-    } else if (theDatabase === "Postgres") {
+    } else if (theDatabase === "postgresql") {
       if (!fs.existsSync(path.join(__dirname, `${month} ${year}_query_logs`))) {
         await fsPromises.mkdir(
           path.join(__dirname, `${month} ${year}_query_logs`)
