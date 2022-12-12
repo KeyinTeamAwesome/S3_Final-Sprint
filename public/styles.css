@@ -81,7 +81,7 @@ footer {
 #search-form select {
 	border: 2px solid black;
 	border-radius: 8px;
-	box-shadow: rgb(177, 177, 177) 0px 4px 4px;
+	box-shadow: rgb(212, 212, 212) 0px 4px 4px;
 	height: 32px;
 	padding: 0 8px;
 }
@@ -104,18 +104,19 @@ nav {
 	background-color: white;
 	box-sizing: border-box;
 	display: flex;
+	min-height: 88px;
 	height: fit-content;
 	justify-content: space-between;
-	padding: 4px 80px;
+	padding: 4px 40px;
 	width: 100%;
 }
 nav ul {
 	display: flex;
-	margin: 0;
-	padding-left: 0 12px;
 }
 nav li {
 	list-style-type: none;
+	padding-left: 24px;
+	align-self: baseline;
 }
 nav h1 {
 	font-size: 1.5em;
@@ -124,7 +125,15 @@ nav p,
 nav a {
 	color: #777;
 }
-
+nav button {
+	font-weight: bold;
+	background-color: black;
+	color: white;
+	border: 2px solid black;
+	border-radius: 8px;
+	box-shadow: rgb(177, 177, 177) 0px 4px 4px;
+	height: 32px;
+}
 /* ********************************** Table ********************************* */
 
 table {

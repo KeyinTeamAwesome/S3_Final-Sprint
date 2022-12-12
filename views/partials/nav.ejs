@@ -1,20 +1,21 @@
 <nav>
 	<h1>MoviesDB</h1>
 	<ul>
-		<ul>
+		<!-- <li>
 			<a href="/search">Search</a>
-		</ul>
-		<ul>
+		</li>
+		<li>
 			<a href="/about">About</a>
-		</ul>
-		<ul>
-			<a href="/signup">Sign Up</a>
-		</ul>
-		<ul>
+		</li>
+		<li>
+			<a href="/register">Sign Up</a>
+		</li>
+		<li>
 			<a href="/login">Login</a>
-		</ul>
-		<ul>
-			<%- include('./logout.ejs') %>
-		</ul>
+		</li> -->
+		<% showLogOutButton = typeof showLogOutButton != 'undefined' ?
+		showLogOutButton : false%><% if (showLogOutButton === true){%>
+		<li><%- include('./logout.ejs') %></li>
+		<% } %>
 	</ul>
 </nav>

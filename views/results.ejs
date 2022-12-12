@@ -1,7 +1,8 @@
 <html lang="en">
 	<%- include('./partials/head.ejs') %>
 	<body>
-		<%- include('./partials/nav.ejs') %>
+		<!-- Since this page can only be accessed if the user is logged in, we display a Log Out button in our nav -->
+		<%- include('./partials/nav.ejs', {showLogOutButton: true}) %>
 		<div id="results-content">
 			<%- include('./partials/searchform.ejs') %>
 			<!-- <form action="/films" method="POST"> -->
