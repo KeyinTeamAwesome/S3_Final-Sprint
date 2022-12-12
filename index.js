@@ -9,16 +9,15 @@ const flash = require("express-flash");
 const session = require("express-session");
 const methodOverride = require("method-override");
 const uuid = require("uuid");
-//const logins = require('./services/p.logins.dal') // use POSTGRESQL dal
-const logins = require("./services/users.dal"); // use MONGODB dal
+const logins = require("./services/auth.dal"); // use MONGODB dal
 const app = express();
 const PORT = process.env.PORT || 3000;
-global.DEBUG = false;
+global.DEBUG = true;
 passport.use(
   new localStrategy(
     { usernameField: "email" },
     async (email, password, done) => {
-      let user = await logins.getUserByEmail(email);
+      let user = await logins.getLoginByEmail(email);
       if (user == null) {
         return done(null, false, { message: "No user with that email." });
       }
@@ -67,17 +66,17 @@ app.use(methodOverride("_method"));
 
 // Passport checkAuthenticated() middleware.
 // For every route we check the person is logged in. If not we send them
-// to the login page
+// LOCALHOST STARTS HERE to the login page
 app.get("/", checkAuthenticated, (req, res) => {
-  res.render("home.ejs", { name: req.user.username });
+  res.render("search.ejs", { name: req.user.username });
 });
 
 app.get("/search", checkAuthenticated, (req, res) => {
   res.render("search.ejs");
 });
 
-const userRouter = require("./routes/users");
-app.use("/users", userRouter);
+const authRouter = require("./routes/auth");
+app.use("/auth", authRouter);
 
 // Passport checkNotAuthenticated() middleware.
 // This middleware is only for the login and register. If someone stumbles
@@ -94,13 +93,13 @@ app.post(
     failureFlash: true,
   })
 );
-app.get("/signup", checkNotAuthenticated, (req, res) => {
-  res.render("signup.ejs");
+app.get("/register", checkNotAuthenticated, (req, res) => {
+  res.render("register.ejs");
 });
-app.post("/signup", checkNotAuthenticated, async (req, res) => {
+app.post("/register", checkNotAuthenticated, async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    let result = await logins.addUser(
+    let result = await logins.addLogin(
       req.body.name,
       req.body.email,
       hashedPassword,
@@ -109,7 +108,7 @@ app.post("/signup", checkNotAuthenticated, async (req, res) => {
     res.redirect("/login");
   } catch (error) {
     console.log(error);
-    res.redirect("/signup");
+    res.redirect("/register");
   }
 });
 
