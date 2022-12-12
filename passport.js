@@ -3,10 +3,7 @@
 const localStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 
-const {
-  getUserByEmail,
-  getUserById,
-} = require("../model/controllers/m.auth.dal");
+const { getUserByEmail, getUserById } = require("./services/users.dal");
 
 function initialize(passport) {
   const authenticateUser = async (email, password, done) => {

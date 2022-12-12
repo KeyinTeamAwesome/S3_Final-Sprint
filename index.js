@@ -1,25 +1,57 @@
-// Date: Dec 7, 2022
-// Assignment: Semester 3 Final Sprint
-// Course Name: Full Stack JavaScript
-// Written By: Kara Balsom, Makenzie Roberts and David Turner
-
-// When a path in the NAV on the browser is selected it will route to the named JS file in the routes or routes api folder respectively.  That selection will trigger an HTTP method either upon selection or as a listener is pressed such as a button or <a> tag link, resulting call is built like a function.  The functions here are build around GET/POST/PUT/PATCH/DELETE requests which will then go to the DAL (data access layer) where the data from the specified collection in mongo is retrieved, that data is then parsed and sent back through functions GET/POST/PUT/PATCH/DELETE that were requested.  This data will be displayed through the approriate EJS file and subsequently in the browser.
-
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 const express = require("express");
-const methodOverride = require("method-override");
+const bcrypt = require("bcrypt");
 const passport = require("passport");
+const localStrategy = require("passport-local").Strategy;
 const flash = require("express-flash");
 const session = require("express-session");
+const methodOverride = require("method-override");
+const uuid = require("uuid");
+const logins = require("./services/auth.dal"); // use MONGODB dal
 const app = express();
-const PORT = 3010;
-
+const PORT = process.env.PORT || 3000;
 global.DEBUG = true;
-app.set("view engine", "ejs");
-app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride("_method"));
+passport.use(
+  new localStrategy(
+    { usernameField: "email" },
+    async (email, password, done) => {
+      let user = await logins.getLoginByEmail(email);
+      if (user == null) {
+        return done(null, false, { message: "No user with that email." });
+      }
+      try {
+        if (await bcrypt.compare(password, user.password)) {
+          return done(null, user);
+        } else {
+          return done(null, false, {
+            message: "Incorrect password was entered.",
+          });
+        }
+      } catch (error) {
+        return done(error);
+      }
+    }
+  )
+);
 
-// Added from passport tutorial in lecture, includes .use passport
+// Passport session setup.
+//   To support persistent login sessions, Passport needs to be able to
+//   serialize users into and deserialize users out of the session.  Typically,
+//   this will be as simple as storing the user ID when serializing, and finding
+//   the user by ID when deserializing.
+passport.serializeUser((user, done) => {
+  done(null, user._id);
+});
+passport.deserializeUser(async (id, done) => {
+  let user = await logins.getLoginById(id);
+  if (DEBUG) console.log("passport.deserializeUser: " + user);
+  done(null, user);
+});
+
+app.set("view-engine", "ejs");
+app.use(express.urlencoded({ extended: true })); //THIS MAY BE TRUE OR FALSE??
 app.use(flash());
 app.use(
   session({
@@ -30,20 +62,77 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(methodOverride("_method"));
 
-app.get("/", checkAuthenticated, async (req, res) => {
-  res.render("home.ejs");
+// Passport checkAuthenticated() middleware.
+// For every route we check the person is logged in. If not we send them
+// LOCALHOST STARTS HERE to the login page
+app.get("/", checkAuthenticated, (req, res) => {
+  res.render("search.ejs", { name: req.user.username });
 });
 
-const searchRouter = require("./routes/search");
-app.use("/search", searchRouter, checkAuthenticated);
-
-const usersRouter = require("./routes/users");
-app.use("/users", usersRouter, checkAuthenticated);
-
-app.use((req, res) => {
-  res.status(404).render("404");
+app.get("/search", checkAuthenticated, (req, res) => {
+  res.render("search.ejs");
 });
+
+const authRouter = require("./routes/auth");
+app.use("/auth", authRouter);
+
+// Passport checkNotAuthenticated() middleware.
+// This middleware is only for the login and register. If someone stumbles
+// upon these routes they only need access if they are NOT authenticated.
+app.get("/login", checkNotAuthenticated, (req, res) => {
+  res.render("login.ejs");
+});
+app.post(
+  "/login",
+  checkNotAuthenticated,
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash: true,
+  })
+);
+app.get("/register", checkNotAuthenticated, (req, res) => {
+  res.render("register.ejs");
+});
+app.post("/register", checkNotAuthenticated, async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    let result = await logins.addLogin(
+      req.body.name,
+      req.body.email,
+      hashedPassword,
+      uuid.v4()
+    );
+    res.redirect("/login");
+  } catch (error) {
+    console.log(error);
+    res.redirect("/register");
+  }
+});
+
+app.delete("/logout", function (req, res, next) {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/login");
+  });
+});
+
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect("/login");
+}
+function checkNotAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return res.redirect("/");
+  }
+  return next();
+}
 
 app.listen(PORT, () => {
   console.log(`Simple app running on port ${PORT}.`);
