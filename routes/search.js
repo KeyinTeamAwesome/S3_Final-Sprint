@@ -29,12 +29,6 @@ router.get("/", async (req, res, next) => {
       req.query.searchTerm,
       !req.query.searchTerm
     );
-  // Data Example:
-  // [
-  // 		{ "title": "Dazed Punk", "release_year": 2003, "rating": "PG-13" },
-  // 		{ "title": "Airplane Sierra", "release_year": 2007, "rating": "PG-13" },
-  // 		{ "title": "Dirty Ace", "release_year": 2002, "rating": "R" },
-  // ];
   if (!req.query.searchTerm) {
     try {
       res.render("search.ejs");
@@ -47,22 +41,28 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/", async (req, res) => {
-  if (DEBUG) console.log("/search/ Next test: ", req.query);
-  // // Data Example:
-  // // [
-  // // 		{ "title": "Dazed Punk", "release_year": 2003, "rating": "PG-13" },
-  // // 		{ "title": "Airplane Sierra", "release_year": 2007, "rating": "PG-13" },
-  // // 		{ "title": "Dirty Ace", "release_year": 2002, "rating": "R" },
-  // // ];
-  // if (!req.query.searchTerm) {
-  // 	try {
-  // 		res.render("search.ejs");
-  // 	} catch {
-  // 		res.render("503");
-  // 	}
-  // } else {
-  // 	next();
-  // }
+  if (DEBUG) console.log("/search/ Next: ", req.query);
+  try {
+    console.log("req.body", req.body);
+    let movies = await searchDal.getMovies(
+      req.query.searchTerm,
+      req.query.database
+    );
+
+    // Error handling for ejs errors caused by results from an invalid search, for instance
+    // if someone manually types in a url query param of a database that does not exist, or
+    // any other possible query params that cannot be handled.
+    res.render("results.ejs", { movies }, function (err, html) {
+      if (err) {
+        console.log(err);
+        res.render("503");
+      } else {
+        res.send(html);
+      }
+    });
+  } catch {
+    res.render("503");
+  }
 });
 
 // router.get("/", async (req, res) => {
@@ -95,8 +95,8 @@ router.get("/", async (req, res) => {
 //   } catch {
 //     res.statusCode = 503;
 //     theStatusCode = res.statusCode;
-//     msg = "Status Code for GET by Id: ${term}";
-//     myEmitter.emit("status", msg, term);
+//     msg = "Status Code for GET by Id: ";
+//     myEmitter.emit("status", msg, theStatusCode);
 //     res.render("503");
 //   }
 // });
