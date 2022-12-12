@@ -135,81 +135,81 @@ router.get("/", async (req, res) => {
 // });
 
 router.post("/", async (req, res) => {
-  if (DEBUG) console.log("movies.POST");
-  try {
-    await actorsDal.addMovie(
-      req.body.genres,
-      req.body.title,
-      req.body.rated,
-      req.body.year
-    );
-    res.redirect("/movies/");
-  } catch {
-    // log this error to an error log file.
-    res.statusCode = 503;
-    theStatusCode = res.statusCode;
-    msg = "Status Code for POST: ";
-    myEmitter.emit("status", msg, theStatusCode);
-    res.render("503");
-  }
+	if (DEBUG) console.log("movies.POST");
+	try {
+		await actorsDal.addMovie(
+			req.body.genres,
+			req.body.title,
+			req.body.rated,
+			req.body.year
+		);
+		res.redirect("/movies/");
+	} catch {
+		// log this error to an error log file.
+		res.statusCode = 503;
+		theStatusCode = res.statusCode;
+		msg = "Status Code for POST: ";
+		myEmitter.emit("status", msg, theStatusCode);
+		res.render("503");
+	}
 });
 
 // PUT, PATCH, and DELETE are part of HTTP, not a part of HTML
 // Therefore, <form method="PUT" ...> doesn't work, but it does work for RESTful API
 
 router.put("/:id", async (req, res) => {
-  if (DEBUG) console.log("movies.PUT: " + req.params.id);
-  try {
-    await actorsDal.putMovie(
-      req.params.id,
-      req.body.genres,
-      req.body.title,
-      req.body.rated,
-      req.body.year
-    );
-    res.redirect("/movies/");
-  } catch {
-    // log this error to an error log file.
-    res.statusCode = 503;
-    theStatusCode = res.statusCode;
-    msg = "Status Code for PUT by Id: ";
-    myEmitter.emit("status", msg, theStatusCode);
-    res.render("503");
-  }
+	if (DEBUG) console.log("movies.PUT: " + req.params.id);
+	try {
+		await actorsDal.putMovie(
+			req.params.id,
+			req.body.genres,
+			req.body.title,
+			req.body.rated,
+			req.body.year
+		);
+		res.redirect("/movies/");
+	} catch {
+		// log this error to an error log file.
+		res.statusCode = 503;
+		theStatusCode = res.statusCode;
+		msg = "Status Code for PUT by Id: ";
+		myEmitter.emit("status", msg, theStatusCode);
+		res.render("503");
+	}
 });
 router.patch("/:id", async (req, res) => {
-  if (DEBUG) console.log("movies.PATCH: " + req.params.id);
-  try {
-    await actorsDal.patchMovie(
-      req.params.id,
-      req.body.genres,
-      req.body.title,
-      req.body.rated,
-      req.body.year
-    );
-    res.redirect("/movies/");
-  } catch {
-    // log this error to an error log file.
-    res.statusCode = 503;
-    theStatusCode = res.statusCode;
-    msg = "Status Code for PATCH by Id: ";
-    myEmitter.emit("status", msg, theStatusCode);
-    res.render("503");
-  }
+	if (DEBUG) console.log("movies.PATCH: " + req.params.id);
+	try {
+		await actorsDal.patchMovie(
+			req.params.id,
+			req.body.genres,
+			req.body.title,
+			req.body.rated,
+			req.body.year
+		);
+		res.redirect("/movies/");
+	} catch {
+		// log this error to an error log file.
+		res.statusCode = 503;
+		theStatusCode = res.statusCode;
+		msg = "Status Code for PATCH by Id: ";
+		myEmitter.emit("status", msg, theStatusCode);
+		res.render("503");
+	}
 });
 router.delete("/:id", async (req, res) => {
-  if (DEBUG) console.log("movies.DELETE: " + req.params.id);
-  try {
-    await actorsDal.deleteMovie(req.params.id);
-    res.redirect("/movies/");
-  } catch {
-    // log this error to an error log file.
-    res.statusCode = 503;
-    theStatusCode = res.statusCode;
-    msg = "Status Code for DELETE by Id: ";
-    myEmitter.emit("status", msg, theStatusCode);
-    res.render("503");
-  }
+	if (DEBUG) console.log("movies.DELETE: " + req.params.id);
+	try {
+		await actorsDal.deleteMovie(req.params.id);
+		res.redirect("/movies/");
+	} catch {
+		// log this error to an error log file.
+		res.statusCode = 503;
+		theStatusCode = res.statusCode;
+		msg = "Status Code for DELETE by Id: ";
+		myEmitter.emit("status", msg, theStatusCode);
+		res.render("503");
+	}
 });
 
 module.exports = router;

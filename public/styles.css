@@ -122,11 +122,12 @@ nav a {
 /* ********************************** Table ********************************* */
 
 table {
-	width: 100%;
+	width: 700px;
 	table-layout: auto;
+	margin: 50px auto;
 }
-#film-post-table {
-	table-layout: fixed;
+.category {
+	padding: 12px;
 }
 table,
 th,
@@ -135,8 +136,7 @@ td {
 	border: 1px solid rgb(173, 173, 173);
 	box-sizing: border-box;
 	justify-self: center;
-	margin: auto;
-	text-align: center;
+	/* text-align: center; */
 }
 th#description-header {
 	color: white;
