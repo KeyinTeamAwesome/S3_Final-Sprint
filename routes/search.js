@@ -3,6 +3,8 @@ const router = express.Router();
 const pp = require("../passport");
 const searchDal = require("../services/search.dal");
 const authDal = require("../services/auth.dal");
+const passport = require("passport");
+const localStrategy = require("passport-local").Strategy;
 
 // const actorsDal = require("../services/m.movies.dal");
 
@@ -56,15 +58,12 @@ router.get("/", pp.checkAuthenticated, async (req, res, next) => {
 router.get("/", async (req, res) => {
   if (DEBUG) console.log("/search/ Next: ", req.query);
   try {
-    console.log("req.body", req.body);
     let movies = await searchDal.getMovies(
       req.query.searchTerm,
       req.query.database
     );
-    console.log(req.query.database);
     theDatabase = req.query.database;
-    msg = req.query.searchTerm;
-    console.log(_id);
+    msg = `User ID: ${req.session.passport.user} Search Term: ${req.query.searchTerm}`;
     myEmitter.emit("query", msg, theDatabase);
 
     // Error handling for ejs errors caused by results from an invalid search, for instance
@@ -82,25 +81,5 @@ router.get("/", async (req, res) => {
     res.render("503");
   }
 });
-
-// router.post("/", async (req, res) => {
-//   if (DEBUG) console.log("movies.POST");
-//   try {
-//     await actorsDal.addMovie(
-//       req.body.genres,
-//       req.body.title,
-//       req.body.rated,
-//       req.body.year
-//     );
-//     res.redirect("/movies/");
-//   } catch {
-//     // log this error to an error log file.
-//     res.statusCode = 503;
-//     theStatusCode = res.statusCode;
-//     msg = "Status Code for POST: ";
-//     myEmitter.emit("status", msg, theStatusCode);
-//     res.render("503");
-//   }
-// });
 
 module.exports = router;
