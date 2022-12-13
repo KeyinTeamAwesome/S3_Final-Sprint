@@ -3,8 +3,9 @@
 		<input
 			type="text"
 			name="searchTerm"
-			value=""
 			placeholder="&#x1F50D; Search by Title, Year, or Genre..."
+			pattern="^[ ,a-zA-Z]+$"
+			title="No special characters"
 			required
 		/>
 		<select name="database" id="database">
