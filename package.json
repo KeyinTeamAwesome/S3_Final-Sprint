@@ -26,8 +26,17 @@
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "method-override": "^3.0.0",
+<<<<<<< Updated upstream
     "mongoose": "^6.7.4",
     "nodemon": "^2.0.20",
+=======
+    "moments": "^0.0.2",
+    "mongo-sanitize": "^1.1.0",
+    "mongoose": "^6.7.4",
+    "nodemon": "^2.0.20",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+>>>>>>> Stashed changes
     "pg": "^8.8.0",
     "uuid": "^9.0.0",
     "y": "^0.3.2"

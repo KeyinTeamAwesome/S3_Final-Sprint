@@ -22,6 +22,7 @@ myEmitter.on("status", (msg, theStatusCode) => {
 	logEvents(msg, theStatusCode);
 });
 
+<<<<<<< Updated upstream
 router.get("/", async (req, res, next) => {
 	if (DEBUG)
 		console.log(
@@ -214,6 +215,57 @@ router.delete("/:id", async (req, res) => {
 		theStatusCode = res.statusCode;
 		msg = "Status Code for DELETE by Id: ";
 		myEmitter.emit("status", msg, theStatusCode);
+=======
+myEmitter.on("query", (msg, theDatabase) => {
+	// once the above part of the listeners has exicuted its block
+	// the logEvents function in logEvents.js will fire and the parameters here will be sent over to be processed
+	queryEvents(msg, theDatabase);
+});
+
+router.get("/", pp.checkAuthenticated, async (req, res, next) => {
+	console.log("index.js: router.get(/) checkAuth | render search | ");
+	//   console.log(`RIGHT HERE!!!: ${authDal.kara}`);
+	if (DEBUG)
+		console.log(
+			"/search/ Initial Get: ",
+			req.query.searchTerm,
+			!req.query.searchTerm
+		);
+	if (!req.query.searchTerm) {
+		try {
+			res.render("search.ejs");
+		} catch {
+			res.render("503");
+		}
+	} else {
+		next();
+	}
+});
+
+router.get("/", async (req, res) => {
+	if (DEBUG) console.log("/search/ Next: ", req.query);
+	try {
+		let movies = await searchDal.getMovies(
+			req.query.searchTerm,
+			req.query.database
+		);
+		theDatabase = req.query.database;
+		msg = `User ID: ${req.session.passport.user} Search Term: ${req.query.searchTerm}`;
+		myEmitter.emit("query", msg, theDatabase);
+
+		// Error handling for ejs errors caused by results from an invalid search, for instance
+		// if someone manually types in a url query param of a database that does not exist, or
+		// any other possible query params that cannot be handled.
+		res.render("results.ejs", { movies }, function (err, html) {
+			if (err) {
+				console.log(err);
+				res.render("503");
+			} else {
+				res.send(html);
+			}
+		});
+	} catch {
+>>>>>>> Stashed changes
 		res.render("503");
 	}
 });

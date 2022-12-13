@@ -166,9 +166,12 @@ async function getMovies(searchTerm, database) {
 
 module.exports = {
 	getMovies,
+<<<<<<< Updated upstream
 	// getMoviesByMovieId,
 	// addMovie,
 	// putMovie,
 	// patchMovie,
 	// deleteMovie,
+=======
+>>>>>>> Stashed changes
 };
