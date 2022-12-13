@@ -1,5 +1,8 @@
 const { MongoClient } = require("mongodb");
-const uri = "mongodb+srv://kbalsom:MacAlex@sprint.rugscot.mongodb.net/test";
+require("dotenv").config();
+
+// .env file must contain: ATLAS_URI=<your mongo connection string>
+const uri = process.env.ATLAS_URI;
 const pool = new MongoClient(uri);
 
 module.exports = pool;
