@@ -5,8 +5,7 @@
 		<%- include('./partials/nav.ejs', {showLogOutButton: true}) %>
 		<div id="results-content">
 			<%- include('./partials/searchform.ejs') %>
-			<!-- <form action="/films" method="POST"> -->
-			<table id="film-post-table">
+			<table>
 				<tr>
 					<th id="description-header" colspan="4">
 						<label>Search Results</label>
@@ -31,7 +30,6 @@
 				</tr>
 				<%}%>
 			</table>
-			<!-- </form> -->
 		</div>
 	</body>
 	<%- include('./partials/foot.ejs') %>
