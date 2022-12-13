@@ -24,62 +24,62 @@ const queryEvents = require("./queries");
 // Creating an dot addListener or dot on function, it will have name "routes", this could be anything and functions below can have different names
 // to serve different purposes then there are in this case 3 parameters, event, level (ex: information, error), and a message that can be logged
 myEmitter.on("status", (msg, theStatusCode) => {
-  // once the above part of the listeners has exicuted its block
-  // the logEvents function in logEvents.js will fire and the parameters here will be sent over to be processed
-  logEvents(msg, theStatusCode);
+	// once the above part of the listeners has exicuted its block
+	// the logEvents function in logEvents.js will fire and the parameters here will be sent over to be processed
+	logEvents(msg, theStatusCode);
 });
 
 myEmitter.on("query", (msg, theDatabase) => {
-  // once the above part of the listeners has exicuted its block
-  // the logEvents function in logEvents.js will fire and the parameters here will be sent over to be processed
-  queryEvents(msg, theDatabase);
+	// once the above part of the listeners has exicuted its block
+	// the logEvents function in logEvents.js will fire and the parameters here will be sent over to be processed
+	queryEvents(msg, theDatabase);
 });
 
 router.get("/", pp.checkAuthenticated, async (req, res, next) => {
-  console.log("index.js: router.get(/) checkAuth | render search | ");
-  //   console.log(`RIGHT HERE!!!: ${authDal.kara}`);
-  if (DEBUG)
-    console.log(
-      "/search/ Initial Get: ",
-      req.query.searchTerm,
-      !req.query.searchTerm
-    );
-  if (!req.query.searchTerm) {
-    try {
-      res.render("search.ejs");
-    } catch {
-      res.render("503");
-    }
-  } else {
-    next();
-  }
+	console.log("index.js: router.get(/) checkAuth | render search | ");
+	//   console.log(`RIGHT HERE!!!: ${authDal.kara}`);
+	if (DEBUG)
+		console.log(
+			"/search/ Initial Get: ",
+			req.query.searchTerm,
+			!req.query.searchTerm
+		);
+	if (!req.query.searchTerm) {
+		try {
+			res.render("search.ejs");
+		} catch {
+			res.render("503.ejs");
+		}
+	} else {
+		next();
+	}
 });
 
 router.get("/", async (req, res) => {
-  if (DEBUG) console.log("/search/ Next: ", req.query);
-  try {
-    let movies = await searchDal.getMovies(
-      req.query.searchTerm,
-      req.query.database
-    );
-    theDatabase = req.query.database;
-    msg = `User ID: ${req.session.passport.user} Search Term: ${req.query.searchTerm}`;
-    myEmitter.emit("query", msg, theDatabase);
+	if (DEBUG) console.log("/search/ Next: ", req.query);
+	try {
+		let movies = await searchDal.getMovies(
+			req.query.searchTerm,
+			req.query.database
+		);
+		theDatabase = req.query.database;
+		msg = `User ID: ${req.session.passport.user} Search Term: ${req.query.searchTerm}`;
+		myEmitter.emit("query", msg, theDatabase);
 
-    // Error handling for ejs errors caused by results from an invalid search, for instance
-    // if someone manually types in a url query param of a database that does not exist, or
-    // any other possible query params that cannot be handled.
-    res.render("results.ejs", { movies }, function (err, html) {
-      if (err) {
-        console.log(err);
-        res.render("503");
-      } else {
-        res.send(html);
-      }
-    });
-  } catch {
-    res.render("503");
-  }
+		// Error handling for ejs errors caused by results from an invalid search, for instance
+		// if someone manually types in a url query param of a database that does not exist, or
+		// any other possible query params that cannot be handled.
+		res.render("results.ejs", { movies }, function (err, html) {
+			if (err) {
+				console.log(err);
+				res.render("503.ejs");
+			} else {
+				res.send(html);
+			}
+		});
+	} catch {
+		res.render("503.ejs");
+	}
 });
 
 module.exports = router;
