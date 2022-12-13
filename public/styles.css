@@ -1,7 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;700&display=swap");
 
-/* (!) Needs to be cleaned up (unnecessary attributes) */
-
 /* ********************************* General ******************************** */
 
 body {
@@ -32,8 +30,9 @@ footer {
 
 /* ****************************** Shared Style ****************************** */
 #content {
-	margin: 12% auto;
+	margin: 8% auto;
 	max-width: 700px;
+	min-width: 240px;
 }
 #content h1 {
 	margin-bottom: 40px;
@@ -41,62 +40,74 @@ footer {
 #content input[type="submit"] {
 	font-weight: bold;
 }
-
-/* ******************************* Index Page ******************************* */
-#home-buttons {
-	margin: 0 auto;
-	max-width: 280px;
-}
-#home-buttons input[type="submit"] {
-	border: 2px solid black;
-	border-radius: 8px;
-	box-shadow: rgb(177, 177, 177) 0px 4px 4px;
-}
-#login-signup-buttons {
-	display: flex;
-	justify-content: space-between;
-}
-
-#login-signup-buttons input {
-	background-color: white;
-	border-color: black;
-	color: black;
-	height: 32px;
-	min-width: 124px;
-}
-
-#search-button input {
-	background-color: black;
-
-	color: white;
-	height: 32px;
-	width: 100%;
-}
-/* ******************************* Search Page ****************************** */
-/* #search-form {
-	display: flex;
-	margin: 0 auto;
-} */
-#search-form input,
-#search-form select {
+input,
+select {
 	border: 2px solid black;
 	border-radius: 8px;
 	box-shadow: rgb(212, 212, 212) 0px 4px 4px;
 	height: 32px;
 	padding: 0 8px;
 }
-#search-form input[type="text"] {
+input[type="text"] {
 	width: 240px;
 }
-#search-form input[type="submit"] {
+input[type="submit"] {
 	background-color: black;
 	color: white;
 }
+button {
+	font-weight: bold;
+	background-color: black;
+	color: white;
+	border: 2px solid black;
+	border-radius: 8px;
+	box-shadow: rgb(152, 152, 152) 0px 4px 3px;
+	height: 32px;
+}
+
+/* *************************** Login/Register Page ************************** */
+#login-register-inputs {
+	margin-bottom: 40px;
+}
+#login-register-inputs div {
+	justify-content: space-between;
+	display: flex;
+	flex-direction: column;
+	margin: 12px 0;
+}
+#login-register-inputs label {
+	text-align: left;
+	width: 100%;
+	font-weight: bold;
+}
+form[action="/login"] button,
+form[action="/register"] button {
+	width: 100%;
+}
+
+/* ******************************* Index Page ******************************* */
+
+#home-buttons {
+	display: flex;
+	justify-content: space-between;
+}
+
+#home-buttons input {
+	height: 32px;
+	min-width: 156px;
+}
+
+#register-button {
+	background-color: white;
+	color: black;
+}
 
 /* ****************************** Results Page ****************************** */
+
 #results-content {
 	margin-top: 80px;
 }
+
 /* *********************************** Nav ********************************** */
 
 nav {
@@ -110,6 +121,10 @@ nav {
 	padding: 4px 40px;
 	width: 100%;
 }
+nav h1 a {
+	color: black;
+	text-decoration: none;
+}
 nav ul {
 	display: flex;
 }
@@ -118,22 +133,17 @@ nav li {
 	padding-left: 24px;
 	align-self: baseline;
 }
+nav form {
+	margin: 0;
+}
 nav h1 {
-	font-size: 1.5em;
+	font-size: 1.8em;
 }
 nav p,
 nav a {
 	color: #777;
 }
-nav button {
-	font-weight: bold;
-	background-color: black;
-	color: white;
-	border: 2px solid black;
-	border-radius: 8px;
-	box-shadow: rgb(177, 177, 177) 0px 4px 4px;
-	height: 32px;
-}
+
 /* ********************************** Table ********************************* */
 
 table {
@@ -163,23 +173,3 @@ tr {
 td {
 	padding: 4px 10px;
 }
-/* ********************************** Input ********************************* */
-
-/* label {
-	font-weight: bold;
-	text-transform: capitalize;
-}
-input {
-	box-sizing: border-box;
-	display: inline;
-	margin: 10px 0;
-	width: 100%;
-}
-button {
-	font-weight: bold;
-	height: 50px;
-	width: 100%;
-}
-#post-button {
-	width: 90%;
-} */

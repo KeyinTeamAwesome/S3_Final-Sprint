@@ -4,22 +4,22 @@
 		<%- include('./partials/nav.ejs') %>
 		<div id="content">
 			<h1>Welcome to MoviesDB</h1>
+
 			<div id="home-buttons">
-				<div id="login-signup-buttons">
-					<form action="/login">
-						<input type="submit" value="Login" />
-					</form>
-					<form action="/register">
-						<input type="submit" value="Sign Up" />
-					</form>
-				</div>
-				<!--  Using ejs we can either hide this unless they're logged in, or change the action to the login page if they're not already logged in -->
-				<div id="search-button">
+				<form action="/login">
+					<input type="submit" value="Login" />
+				</form>
+				<form action="/register">
+					<input id="register-button" type="submit" value="Sign Up" />
+				</form>
+			</div>
+			<!--  Using ejs we can either hide this unless they're logged in, or change the action to the login page if they're not already logged in -->
+			<!-- <div id="search-button">
 					<form action="/search">
 						<input type="submit" value="Search" />
 					</form>
-				</div>
-			</div>
+				</div> -->
+
 			<!-- <form action="/films" method="POST">
 				<input type="text" name="searchTerm" value="PostTest" />
 				<select name="database" id="database">
