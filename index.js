@@ -86,6 +86,10 @@ app.delete("/logout", function (req, res, next) {
 	});
 });
 
+app.use((req, res) => {
+	res.status(404).render("404.ejs");
+});
+
 app.listen(PORT, () => {
 	console.log(`Simple app running on port ${PORT}.`);
 });
