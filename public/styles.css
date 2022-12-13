@@ -37,7 +37,9 @@ footer {
 #content h1 {
 	margin-bottom: 40px;
 }
-
+#content p {
+	margin: 32px 0;
+}
 #content input[type="submit"] {
 	font-weight: bold;
 }
