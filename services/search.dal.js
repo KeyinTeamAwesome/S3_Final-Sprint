@@ -5,6 +5,7 @@ const sanitize = require("mongo-sanitize");
 
 async function getMovies(searchTerm, database) {
 	if (DEBUG) console.log("getMovies() in search.dal.js");
+	let results = [];
 	if (database === "mongodb") {
 		let queryObj = new Object();
 		/*
@@ -41,8 +42,8 @@ async function getMovies(searchTerm, database) {
 				.db("sprint2")
 				.collection("movies")
 				.find(queryObj);
-			let results = await cursor.toArray();
-			if (DEBUG) console.log(results);
+			results = await cursor.toArray();
+			if (DEBUG) console.table(results);
 			return results;
 		} catch (error) {
 			console.log(error);
@@ -80,7 +81,7 @@ async function getMovies(searchTerm, database) {
 
 		console.log(sql);
 		try {
-			let results = await new Promise(function (resolve, reject) {
+			results = await new Promise(function (resolve, reject) {
 				pgDal.query(sql, [], (err, result) => {
 					if (err) {
 						// logging should go here
@@ -95,10 +96,9 @@ async function getMovies(searchTerm, database) {
 			return results;
 		} catch (error) {
 			console.log(error);
-			let results = [];
-			return results;
 		}
 	}
+	return results;
 }
 
 module.exports = {
