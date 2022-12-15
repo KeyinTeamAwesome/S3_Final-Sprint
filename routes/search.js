@@ -37,7 +37,6 @@ myEmitter.on("query", (msg, theDatabase) => {
 
 router.get("/", pp.checkAuthenticated, async (req, res, next) => {
   console.log("index.js: router.get(/) checkAuth | render search | ");
-  //   console.log(`RIGHT HERE!!!: ${authDal.kara}`);
   if (DEBUG)
     console.log(
       "/search/ Initial Get: ",
