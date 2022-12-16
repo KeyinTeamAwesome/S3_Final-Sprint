@@ -14,13 +14,14 @@ async function getLogins() {
 async function getLoginByEmail(email) {
   try {
     await dal.connect();
-    const result = await dal
+    const user = await dal
       .db("sprint2")
       .collection("users")
       .findOne({ email: email });
+    global.user = user;
     if (DEBUG)
       console.error("mlogins.getLoginByEmail(" + email + "): " + result);
-    return result;
+    return user;
   } catch (error) {
     console.log(error);
   }
