@@ -62,6 +62,7 @@ router.post("/new", async (req, res) => {
         res.redirect("/auth/new");
       } else {
         req.app.locals.status = "New account created, please login.";
+        res.statusCode = 200;
         res.redirect("/auth");
       }
     } else {

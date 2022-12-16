@@ -34,7 +34,6 @@ app.use(methodOverride("_method"));
 // LOCALHOST STARTS HERE to the login page
 app.get("/", (req, res) => {
   res.render("index.ejs");
-  // res.render("index.ejs", { name: req.user.username });
 });
 
 const searchRouter = require("./routes/search");
