@@ -11,6 +11,7 @@ const uuid = require("uuid");
 const logins = require("./services/auth.dal");
 const app = express();
 const pp = require("./passport");
+const dal = require("./services/mdb");
 const PORT = process.env.PORT || 3000;
 global.DEBUG = true;
 
@@ -85,6 +86,10 @@ app.delete("/logout", function (req, res, next) {
   });
 });
 
-app.listen(PORT, () => {
+const server = app.listen(port, () => {
   console.log(`Simple app running on port ${PORT}.`);
 });
+
+module.exports = {
+  server,
+};

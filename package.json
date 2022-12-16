@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "testw": "jest --watch",
+    "testc": "jest --coverage",
     "start": "nodemon index.js"
   },
   "repository": {
