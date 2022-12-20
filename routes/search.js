@@ -85,7 +85,7 @@ router.get("/", async (req, res) => {
     // Error handling for ejs errors caused by results from an invalid search, for instance
     // if someone manually types in a url query param of a database that does not exist, or
     // any other possible query params that cannot be handled.
-    res.render("results.ejs", { movis }, function (err, html) {
+    res.render("results.ejs", { movies }, function (err, html) {
       if (err) {
         console.log(err);
         theStatusCode = 503;
