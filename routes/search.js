@@ -31,11 +31,15 @@ myEmitter.on("status", (msg, theStatusCode) => {
 });
 
 myEmitter.on("query", (msg, theDatabase) => {
-  // once the above part of the listeners has exicuted its block
+  // once the above part of the listeners has executed its block
   // the logEvents function in logEvents.js will fire and the parameters here will be sent over to be processed
   queryEvents(msg, theDatabase);
 });
 
+// This is the route for the search page, the get request will render the search.ejs page
+// search/Initial Get: will be logged to the console if the DEBUG variable is set to true
+// before the user has access to the search page they must be authenticated, if they are not
+// they will be redirected to the login page
 router.get("/", pp.checkAuthenticated, async (req, res, next) => {
   console.log("index.js: router.get(/) checkAuth | render search | ");
   if (DEBUG)
@@ -44,6 +48,9 @@ router.get("/", pp.checkAuthenticated, async (req, res, next) => {
       req.query.searchTerm,
       !req.query.searchTerm
     );
+  // below is the error handling for the search.ejs page, if the user manually types in a url query param of a database that does not exist, or any other possible query params that cannot be handled
+  // !req.query.searchTerm is the same as req.query.searchTerm === undefined and else next() moves on to the next middleware function
+  // if !req.query.searchTerm is true then the user has not searched for anything yet so render the search.ejs page
   if (!req.query.searchTerm) {
     try {
       res.render("search.ejs");
@@ -58,13 +65,18 @@ router.get("/", pp.checkAuthenticated, async (req, res, next) => {
   }
 });
 
+// this .get "/" is the same as the above .get "/" but this
+// one is for when the user has searched for something
 router.get("/", async (req, res) => {
   if (DEBUG) console.log("/search/ Next: ", req.query);
+  // let movies is the variable that will hold the results from the search
+  // .getMovies is the function that will be called from the search.dal.js file
   try {
     let movies = await searchDal.getMovies(
       req.query.searchTerm,
       req.query.database
     );
+    // theDatabase is the variable that will hold the database that the user searched in so it can be logged
     theDatabase = req.query.database;
     // .passport.user is the user id that is stored in the current session
     msg = `User ID: ${req.session.passport.user} Search Term: ${req.query.searchTerm}`;
