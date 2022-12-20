@@ -57,7 +57,7 @@ router.get("/", pp.checkAuthenticated, async (req, res, next) => {
     } catch {
       theStatusCode = 503;
       msg = `Error`;
-      myEmitter.emit("status", msg, theStatusCode);
+      myEmitter.emit("status", msg, theStatusCode); //logEvents emitter.
       res.render("503.ejs");
     }
   } else {
@@ -90,7 +90,7 @@ router.get("/", async (req, res) => {
         console.log(err);
         theStatusCode = 503;
         msg = `Error`;
-        myEmitter.emit("status", msg, theStatusCode);
+        myEmitter.emit("status", msg, theStatusCode); //logEvents emitter.
         res.render("503.ejs");
       } else {
         res.send(html);
@@ -99,9 +99,9 @@ router.get("/", async (req, res) => {
   } catch {
     theStatusCode = 503;
     msg = `Error`;
-    myEmitter.emit("status", msg, theStatusCode);
+    myEmitter.emit("status", msg, theStatusCode); //logEvents emitter.
     res.render("503.ejs");
   }
 });
 
-module.exports = router;
+module.exports = router; //Export the router.
