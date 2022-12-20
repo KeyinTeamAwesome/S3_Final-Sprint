@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 3000;
 global.DEBUG = true;
 
 app.set("view-engine", "ejs");
-app.use(express.urlencoded({ extended: true })); //THIS MAY BE TRUE OR FALSE??
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.use(flash());
 app.use(
