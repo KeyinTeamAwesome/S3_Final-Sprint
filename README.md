@@ -76,7 +76,7 @@ This project uses **Node, Express, and PostgreSQL, MongoDB** to create a databas
    ```
 #### **Setting up the SESSION_SECRET in .env**
 
-For this project, express must utilize an environment variable named `SESSION_SECRET`. In the .env file you created earlier, simply add the follwing line and replace <YOUR NAME> with your name. Don't forget to save.
+For this project, express must utilize an environment variable named `SESSION_SECRET`. In the .env file you created earlier, simply add the follwing line and replace <YOUR NAME> with your first name. Don't forget to save.
 
 ```
 SESSION_SECRET=<YOUR_NAME>
