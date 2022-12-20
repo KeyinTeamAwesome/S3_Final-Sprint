@@ -35,7 +35,6 @@ const queryEvents = async (msg) => {
 
   try {
     if (theDatabase === "mongodb") {
-      //CHANGE THIS DEPENDING ON WHAT WE CALL IT
       if (!fs.existsSync(path.join(__dirname, `${month} ${year}_query_logs`))) {
         await fsPromises.mkdir(
           path.join(__dirname, `${month} ${year}_query_logs`)
