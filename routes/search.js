@@ -6,8 +6,6 @@ const authDal = require("../services/auth.dal");
 const passport = require("passport");
 const localStrategy = require("passport-local").Strategy;
 
-// const actorsDal = require("../services/m.movies.dal");
-
 // This will bring in the "fs" or file structure global object no npm install required
 const fs = require("fs");
 // This will bring in the "events" global object no npm install required
@@ -24,8 +22,8 @@ const queryEvents = require("../logging/queries");
 // Creating an dot addListener or dot on function, it will have name "routes", this could be anything and functions below can have different names
 // to serve different purposes then there are in this case 3 parameters, event, level (ex: information, error), and a message that can be logged
 myEmitter.on("status", (msg, theStatusCode) => {
-  // once the above part of the listeners has exicuted its block
-  // the logEvents function in logEvents.js will fire and the parameters here will be sent over to be processed
+  // Once the above part of the listeners has exicuted its block
+  // the logEvents function in logEvents.js will fire and the parameters here will be sent over to be processed.
   logEvents(msg, theStatusCode);
 });
 
