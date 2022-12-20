@@ -4,11 +4,11 @@ const pgDal = require("./pgdb");
 const sanitize = require("mongo-sanitize");
 
 async function getMovies(searchTerm, database) {
-	if (DEBUG) console.log("getMovies() in search.dal.js");
-	let results = [];
-	if (database === "mongodb") {
-		let queryObj = new Object();
-		/*
+  if (DEBUG) console.log("getMovies() in search.dal.js");
+  let results = [];
+  if (database === "mongodb") {
+    let queryObj = new Object();
+    /*
     When a user enters a search term, we want to search for it through all categories.
 		For example, if the user searches for "2000" it will return all movies released in
 		the year 2000, but also any movies with "2000" in the title.
@@ -22,51 +22,51 @@ async function getMovies(searchTerm, database) {
 		this a little differently.
     */
 
-		// Note: We use mongo-sanitize to sanitize the search term before we use it in the query, to prevent any possible injection attacks.
+    // Note: We use mongo-sanitize to sanitize the search term before we use it in the query, to prevent any possible injection attacks.
 
-		queryObj["$or"] = [
-			{ title: sanitize(new RegExp(searchTerm, "i")) },
-			{ genre: sanitize(new RegExp(searchTerm, "i")) },
-			{
-				year: sanitize(
-					isNaN(Number(searchTerm)) ? searchTerm : Number(searchTerm)
-				),
-			},
-			{
-				company_name: sanitize(new RegExp(searchTerm, "i")),
-			},
-		];
-		// Query: { '$or': [ { title: /searchterm/i }, { genre: /searchterm/i }, { year: 'searchterm' } ] }
+    queryObj["$or"] = [
+      { title: sanitize(new RegExp(searchTerm, "i")) },
+      { genre: sanitize(new RegExp(searchTerm, "i")) },
+      {
+        year: sanitize(
+          isNaN(Number(searchTerm)) ? searchTerm : Number(searchTerm)
+        ),
+      },
+      {
+        company_name: sanitize(new RegExp(searchTerm, "i")),
+      },
+    ];
+    // Query: { '$or': [ { title: /searchterm/i }, { genre: /searchterm/i }, { year: 'searchterm' } ] }
 
-		// Multi-table Join - We're joining the movies and production_companies
-		// collections by the production_company_id field. Each movie will have a
-		// production_company_id field that matches the id field in the
-		// production_companies collection. We're using the $lookup operator to join the
-		// two collections, and the $match operator to filter the results based on the
-		// search term.
-		console.log("query: ", queryObj);
-		let aggregateObject = [
-			{
-				$lookup: {
-					from: "production_companies",
-					localField: "production_company_id",
-					foreignField: "id",
-					as: "company_name",
-				},
-			},
-			{
-				$set: {
-					company_name: {
-						$arrayElemAt: ["$company_name.company_name", 0],
-					},
-				},
-			},
-			{
-				$match: queryObj,
-			},
-		];
+    // Multi-table Join - We're joining the movies and production_companies
+    // collections by the production_company_id field. Each movie will have a
+    // production_company_id field that matches the id field in the
+    // production_companies collection. We're using the $lookup operator to join the
+    // two collections, and the $match operator to filter the results based on the
+    // search term.
+    console.log("query: ", queryObj);
+    let aggregateObject = [
+      {
+        $lookup: {
+          from: "production_companies",
+          localField: "production_company_id",
+          foreignField: "id",
+          as: "company_name",
+        },
+      },
+      {
+        $set: {
+          company_name: {
+            $arrayElemAt: ["$company_name.company_name", 0],
+          },
+        },
+      },
+      {
+        $match: queryObj,
+      },
+    ];
 
-		/*
+    /*
 		Full Aggregate query with $set operator:
 
 		db.movies.aggregate([
@@ -93,29 +93,29 @@ async function getMovies(searchTerm, database) {
 		]);
 		*/
 
-		try {
-			await mDal.connect();
-			const cursor = await mDal
-				.db("sprint2")
-				.collection("movies")
-				.aggregate(aggregateObject);
-			results = await cursor.toArray();
+    try {
+      await mDal.connect();
+      const cursor = await mDal
+        .db("sprint2")
+        .collection("movies")
+        .aggregate(aggregateObject);
+      results = await cursor.toArray();
 
-			if (DEBUG) console.log(results);
-			return results;
-		} catch (error) {
-			console.log(error);
-		}
-	}
+      if (DEBUG) console.log(results);
+      return results;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-	if (database === "postgresql") {
-		if (DEBUG) console.log("getMovies() postgres selected");
+  if (database === "postgresql") {
+    if (DEBUG) console.log("getMovies() postgres selected");
 
-		let title = `%${searchTerm}%`;
-		let genre = `%${searchTerm}%`;
-		let year = Number(searchTerm); // Here we try to convert the search term to a number. If it's not a number, it will return NaN - which we will check for below.
-		let company_name = `%${searchTerm}%`;
-		/*
+    let title = `%${searchTerm}%`;
+    let genre = `%${searchTerm}%`;
+    let year = Number(searchTerm); // Here we try to convert the search term to a number. If it's not a number, it will return NaN - which we will check for below.
+    let company_name = `%${searchTerm}%`;
+    /*
       Here is where we have to handle the year field differently. In postgresql, if we
       pass in an invalid type for year, it will throw an error - but we still want to
       search for the other fields even if the year field is invalid. 
@@ -126,52 +126,52 @@ async function getMovies(searchTerm, database) {
       entering non-digit characters it's not going to match a year, string or not.
       Therefore, this will return the same results as the mongoDB query above.
     */
-		// new sql
-		// SELECT movies.title, movies.genre, movies.year, production_companies.company_name
-		// FROM public.movies
-		// INNER JOIN production_companies
-		//         ON movies.production_company_id = production_companies.id
-		// WHERE movies.title ILIKE '${title}' OR movies.genre ILIKE '${genre}'  OR movies.year = ${year} OR production_companies.company_name ILIKE '${company_name}';
+    // new sql
+    // SELECT movies.title, movies.genre, movies.year, production_companies.company_name
+    // FROM public.movies
+    // INNER JOIN production_companies
+    //         ON movies.production_company_id = production_companies.id
+    // WHERE movies.title ILIKE '${title}' OR movies.genre ILIKE '${genre}'  OR movies.year = ${year} OR production_companies.company_name ILIKE '${company_name}';
 
-		// Note: We are using parameterized queries as a security measure to prevent SQL injection attacks.
+    // Note: We are using parameterized queries as a security measure to prevent SQL injection attacks.
 
-		let sql = `SELECT movies.title, movies.genre, movies.year, production_companies.company_name
+    let sql = `SELECT movies.title, movies.genre, movies.year, production_companies.company_name
 		FROM public.movies
 		INNER JOIN production_companies
 		        ON movies.production_company_id = production_companies.id
 		WHERE movies.title ILIKE '${title}' OR movies.genre ILIKE '${genre}' OR movies.year = ${year} OR production_companies.company_name ILIKE '${company_name}';`;
 
-		// If the year field is not a number, we alter the SQL query to not include the year field, because if their search is not a number it will not match a year anyway, so we exclude it as to not cause any errors.
-		if (isNaN(year)) {
-			sql = `SELECT movies.title, movies.genre, movies.year, production_companies.company_name
+    // If the year field is not a number, we alter the SQL query to not include the year field, because if their search is not a number it will not match a year anyway, so we exclude it as to not cause any errors.
+    if (isNaN(year)) {
+      sql = `SELECT movies.title, movies.genre, movies.year, production_companies.company_name
 			FROM public.movies
 			INNER JOIN production_companies
 					ON movies.production_company_id = production_companies.id
 			WHERE movies.title ILIKE '${title}' OR movies.genre ILIKE '${genre}' OR production_companies.company_name ILIKE '${company_name}';`;
-		}
+    }
 
-		console.log(sql);
-		try {
-			results = await new Promise(function (resolve, reject) {
-				pgDal.query(sql, [], (err, result) => {
-					if (err) {
-						// logging should go here
-						if (DEBUG) console.log(err);
-						reject(err);
-					} else {
-						resolve(result.rows);
-					}
-				});
-			});
-			if (DEBUG) console.table(results);
-			return results;
-		} catch (error) {
-			console.log(error);
-		}
-	}
-	return results;
+    console.log(sql);
+    try {
+      results = await new Promise(function (resolve, reject) {
+        pgDal.query(sql, [], (err, result) => {
+          if (err) {
+            // logging should go here
+            if (DEBUG) console.log(err);
+            reject(err);
+          } else {
+            resolve(result.rows);
+          }
+        });
+      });
+      if (DEBUG) console.table(results);
+      return results;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  return results;
 }
 
 module.exports = {
-	getMovies,
+  getMovies,
 };

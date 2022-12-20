@@ -3,11 +3,10 @@ const { getLoginByEmail, addLogin } = require("../services/auth.dal");
 require("dotenv").config();
 const dal = require("../services/mdb");
 
-describe("Testing on some functions", () => {
+describe("Testing addLogin and getLoginByEmail functions", () => {
   // Setting up db connection
   beforeAll(async () => {
     try {
-      // const app = require("../server");
       await dal.connect();
       global.userCollection = dal.db("sprint2").collection("users");
       global.DEBUG = false;
@@ -21,9 +20,8 @@ describe("Testing on some functions", () => {
     dal.close();
   });
 
-  // Running tests below
+  // Test: Add user with addUser function, and get that user with getLoginByEmail function.
   test("addLogin function testing", async () => {
-    //Test Criteria 1
     const userInfo = {
       name: "Joe",
       email: "joe@testing.com",
