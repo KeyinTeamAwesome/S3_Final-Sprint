@@ -18,7 +18,7 @@ This project uses **Node, Express, and PostgreSQL, MongoDB** to create a databas
 
 #### **Setting up the PostgreSQL Database**
 
-1. First, the database needs to be restored locally. In pgAdmin, create a new database named `data-structures-sprint1`. (If you decide you choose a different name for the database, make sure to update the 'database' property in `config.js` with the name you've chosen.)
+1. First, the database needs to be restored locally. In pgAdmin, create a new database.
 
 2. Then, restore it using the file `SQL_and_Mongo-Docs/final-sprint_postgres_db_backup.sql`
 

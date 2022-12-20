@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 const express = require("express");
 const bcrypt = require("bcrypt");
+// after npm install of passport we need use require to bring it in
 const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
@@ -10,6 +11,7 @@ const methodOverride = require("method-override");
 const uuid = require("uuid");
 const logins = require("./services/auth.dal");
 const app = express();
+// pp is the passport.js file
 const pp = require("./passport");
 const PORT = process.env.PORT || 3000;
 global.DEBUG = true;
@@ -25,8 +27,10 @@ app.use(
     saveUninitialized: false,
   })
 );
+// Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+// below is the method override middleware, method override is a npm package that allows us to use the put and delete methods
 app.use(methodOverride("_method"));
 
 // Passport checkAuthenticated() middleware.
