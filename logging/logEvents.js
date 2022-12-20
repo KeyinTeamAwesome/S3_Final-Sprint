@@ -22,16 +22,16 @@ const month = moment().format("MMM"); //This assigns the constant month to the s
 
 const year = moment().year();
 
-// log events is promising to take the parameters from the emitter
-// listener in routes and send that data to the try / accept block
-// fileLineItem is the information that is written to the log file
+// loEvents is promising to take the parameters from the emitter
+// listener in routes and send that data to the try / accept block.
+// fileLineItem is the information that is written to the log file.
 const logEvents = async (msg, theStatusCode) => {
   const fileLineItem = `${date} \t${time} \t${msg} \t${theStatusCode} \t${uuid()}`;
 
-  // try catch block is used to evaluate if 1 there is a filefolder to place the line item, if is does exit
+  // Try catch block is used to evaluate if 1 there is a folder to place the line item, if is does exit
   // it will take the fileLineItem and append it to the awaiting file.  If it does not exit then the folder is created
   // the file is created then the data is appended to that file
-  // catch will handle any error that occurs if the try fails
+  // catch will handle any error that occurs if the try fails.
 
   try {
     if (theStatusCode === 503) {
