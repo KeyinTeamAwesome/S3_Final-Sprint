@@ -1,3 +1,6 @@
+// All the const variables below like express, router, pp, passport, fs, eventEmmitter,
+// MyEmitter, myEmitter, logEvents, queryEvents, and authDal are all npm packages
+
 const express = require("express");
 const router = express.Router();
 // pp is the passport.js file used to check if the user is authenticated
@@ -6,7 +9,6 @@ const searchDal = require("../services/search.dal");
 const authDal = require("../services/auth.dal");
 // This will bring in the "passport" npm package for use in this file
 const passport = require("passport");
-
 // This will bring in the "fs" or file structure global object no npm install required
 const fs = require("fs");
 // This will bring in the "events" global object no npm install required
