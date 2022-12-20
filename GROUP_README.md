@@ -6,7 +6,7 @@ Semester 3 Final Sprint, build a RESTful API, Node/Express/EJS/MongoDB/PostgreSQ
 - Assignment: Final Sprint
 - Assignment Detail: Build a RESTful API, Node/Express/EJS/MongoDB/PostgreSQ
 - Course Name: Full Stack JavaScript
-- Written By: Glen May, Makenzie Roberts, Kara Bolsom and David Turner
+- Written By: Makenzie Roberts, Kara Balsom and David Turner
 
 1. Run npm init : this creates a basic package.json file
 2. Run npm i --save-dev nodemon : installs nodemon to automatically refresh terminal while coding, check package.json to see the "dependency" section
@@ -21,7 +21,7 @@ and you should see this structure
 "scripts": {
 "start": "nodemon index.js"
 },
-"author": "David Turner",
+"author": "David Turner, Kara Balsom, Makenzie Roberts",
 
 if scripts already exists do the following, NOTE a comma has to separate the 2
 
