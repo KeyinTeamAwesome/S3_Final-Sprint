@@ -7,10 +7,13 @@ const flash = require("express-flash");
 const session = require("express-session");
 const logins = require("./services/auth.dal");
 
-// Passport is an authentication middleware for Node.js applications. Allow authentication of users while running the application by using authentication strategies such as local authentication (username and password)
+// Passport is an authentication middleware for Node.js applications.
+// Allow authentication of users while running the application by using authentication strategies
+// such as local authentication (username and password)
 
 // Passport session setup.
-// passport.use() is a method that takes in a new instance of the localStrategy and will check the username and password against the database
+// passport.use() is a method that takes in a new instance of the
+// localStrategy and will check the username and password against the database
 passport.use(
   new localStrategy(
     { usernameField: "email" },
