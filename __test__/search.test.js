@@ -21,13 +21,13 @@ describe("Testing getMovies function", () => {
   });
 
   test("addLogin function testing", async () => {
-    const searchTerm = "Due Date";
+    const searchTerm = "Head of State";
     const database = "mongodb";
     let query = await getMovies(searchTerm, database);
     expect(query).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          title: "Due Date",
+          title: "Head of State",
         }),
       ])
     );
