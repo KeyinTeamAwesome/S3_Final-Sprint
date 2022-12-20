@@ -36,7 +36,7 @@ async function getMovies(searchTerm, database) {
 				company_name: sanitize(new RegExp(searchTerm, "i")),
 			},
 		];
-		// Query: { '$or': [ { title: /searchterm/i }, { genre: /searchterm/i }, { year: 'searchterm' } ] }
+		// Query: { '$or': [ { title: /searchterm/i }, { genre: /searchterm/i }, { year: 'searchterm' }, {company_name: /searchterm/i} ] }
 
 		// Multi-table Join - We're joining the movies and production_companies
 		// collections by the production_company_id field. Each movie will have a
