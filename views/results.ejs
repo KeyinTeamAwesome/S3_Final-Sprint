@@ -15,16 +15,18 @@
 					<th class="category">Title</th>
 					<th class="category">Genre</th>
 					<th class="category">Year</th>
+					<th class="category">Production Company</th>
 				</tr>
 				<% if (movies.length > 0) { %> <% movies.forEach(movie => { %>
 				<tr>
 					<td><%= movie.title %></td>
 					<td style="text-align: center"><%= movie.genre %></td>
 					<td style="text-align: center"><%= movie.year %></td>
+					<td style="text-align: center"><%= movie.company_name%></td>
 				</tr>
 				<% }) %> <% } else { %>
 				<tr>
-					<td colspan="3" style="text-align: center">
+					<td colspan="4" style="text-align: center">
 						Sorry, no movies match your search.
 					</td>
 				</tr>

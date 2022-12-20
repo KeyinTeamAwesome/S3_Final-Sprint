@@ -32,22 +32,79 @@ async function getMovies(searchTerm, database) {
 					isNaN(Number(searchTerm)) ? searchTerm : Number(searchTerm)
 				),
 			},
+			{
+				company_name: sanitize(new RegExp(searchTerm, "i")),
+			},
+		];
+		// Query: { '$or': [ { title: /searchterm/i }, { genre: /searchterm/i }, { year: 'searchterm' } ] }
+
+		// Multi-table Join - We're joining the movies and production_companies
+		// collections by the production_company_id field. Each movie will have a
+		// production_company_id field that matches the id field in the
+		// production_companies collection. We're using the $lookup operator to join the
+		// two collections, and the $match operator to filter the results based on the
+		// search term.
+		console.log("query: ", queryObj);
+		let aggregateObject = [
+			{
+				$lookup: {
+					from: "production_companies",
+					localField: "production_company_id",
+					foreignField: "id",
+					as: "company_name",
+				},
+			},
+			{
+				$set: {
+					company_name: {
+						$arrayElemAt: ["$company_name.company_name", 0],
+					},
+				},
+			},
+			{
+				$match: queryObj,
+			},
 		];
 
-		console.log("query: ", queryObj);
+		/*
+		Full Aggregate query with $set operator:
+
+		db.movies.aggregate([
+			{
+				$lookup: {
+					from: "production_companies",
+					localField: "production_company_id",
+					foreignField: "id",
+					as: "company_name",
+				},
+			},
+			{
+				$match: {
+					$or: [{ title: /comedy/i }, { genre: /comedy/i }, { year: "comedy" }],
+				},
+			},
+			{
+				$set: {
+					company_name: {
+						$arrayElemAt: ["$company_name.company_name", 0],
+					},
+				},
+			},
+		]);
+		*/
 
 		try {
 			await mDal.connect();
 			const cursor = await mDal
 				.db("sprint2")
 				.collection("movies")
-				.find(queryObj);
+				.aggregate(aggregateObject);
 			results = await cursor.toArray();
-			if (DEBUG) console.table(results);
+
+			if (DEBUG) console.log(results);
 			return results;
 		} catch (error) {
 			console.log(error);
-			// Maybe send back a 503 here as well? Not sure if I'll have to. We'll see. !REFERENCE my(kenzi) copy of Jamie's mongo-support folder
 		}
 	}
 
@@ -57,7 +114,7 @@ async function getMovies(searchTerm, database) {
 		let title = `%${searchTerm}%`;
 		let genre = `%${searchTerm}%`;
 		let year = Number(searchTerm); // Here we try to convert the search term to a number. If it's not a number, it will return NaN - which we will check for below.
-
+		let company_name = `%${searchTerm}%`;
 		/*
       Here is where we have to handle the year field differently. In postgresql, if we
       pass in an invalid type for year, it will throw an error - but we still want to
@@ -69,14 +126,28 @@ async function getMovies(searchTerm, database) {
       entering non-digit characters it's not going to match a year, string or not.
       Therefore, this will return the same results as the mongoDB query above.
     */
+		// new sql
+		// SELECT movies.title, movies.genre, movies.year, production_companies.company_name
+		// FROM public.movies
+		// INNER JOIN production_companies
+		//         ON movies.production_company_id = production_companies.id
+		// WHERE movies.title ILIKE '${title}' OR movies.genre ILIKE '${genre}'  OR movies.year = ${year} OR production_companies.company_name ILIKE '${company_name}';
 
 		// Note: We are using parameterized queries as a security measure to prevent SQL injection attacks.
 
-		let sql = `SELECT * from public.movies WHERE title ILIKE '${title}' OR genre ILIKE '${genre}' OR year = ${year};`;
+		let sql = `SELECT movies.title, movies.genre, movies.year, production_companies.company_name
+		FROM public.movies
+		INNER JOIN production_companies
+		        ON movies.production_company_id = production_companies.id
+		WHERE movies.title ILIKE '${title}' OR movies.genre ILIKE '${genre}' OR movies.year = ${year} OR production_companies.company_name ILIKE '${company_name}';`;
 
-		// If the year field is not a number, we alter the SQL query to not include the year field.
+		// If the year field is not a number, we alter the SQL query to not include the year field, because if their search is not a number it will not match a year anyway, so we exclude it as to not cause any errors.
 		if (isNaN(year)) {
-			sql = `SELECT * from public.movies WHERE title ILIKE '${title}' OR genre ILIKE '${genre}';`;
+			sql = `SELECT movies.title, movies.genre, movies.year, production_companies.company_name
+			FROM public.movies
+			INNER JOIN production_companies
+					ON movies.production_company_id = production_companies.id
+			WHERE movies.title ILIKE '${title}' OR movies.genre ILIKE '${genre}' OR production_companies.company_name ILIKE '${company_name}';`;
 		}
 
 		console.log(sql);
