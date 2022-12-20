@@ -30,7 +30,7 @@ app.use(
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
-// below is the method override middleware, override middleware is needed to use the delete method
+// below is the method override middleware, method override is a npm package that allows us to use the put and delete methods
 app.use(methodOverride("_method"));
 
 // Passport checkAuthenticated() middleware.
