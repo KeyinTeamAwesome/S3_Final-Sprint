@@ -35,7 +35,6 @@ myEmitter.on("query", (msg, theDatabase) => {
 
 router.get("/", pp.checkAuthenticated, async (req, res, next) => {
   console.log("index.js: router.get(/) checkAuth | render search | ");
-  //   console.log(`RIGHT HERE!!!: ${authDal.kara}`);
   if (DEBUG)
     console.log(
       "/search/ Initial Get: ",
@@ -46,6 +45,9 @@ router.get("/", pp.checkAuthenticated, async (req, res, next) => {
     try {
       res.render("search.ejs");
     } catch {
+      theStatusCode = 503;
+      msg = `Error`;
+      myEmitter.emit("status", msg, theStatusCode);
       res.render("503.ejs");
     }
   } else {
@@ -70,12 +72,18 @@ router.get("/", async (req, res) => {
     res.render("results.ejs", { movies }, function (err, html) {
       if (err) {
         console.log(err);
+        theStatusCode = 503;
+        msg = `Error`;
+        myEmitter.emit("status", msg, theStatusCode);
         res.render("503.ejs");
       } else {
         res.send(html);
       }
     });
   } catch {
+    theStatusCode = 503;
+    msg = `Error`;
+    myEmitter.emit("status", msg, theStatusCode);
     res.render("503.ejs");
   }
 });

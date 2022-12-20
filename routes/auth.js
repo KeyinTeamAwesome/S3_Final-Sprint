@@ -49,8 +49,10 @@ router.post("/", async (req, res) => {
   } catch (error) {
     console.log(error);
     if (DEBUG) console.log("auth.getLoginByUsername().catch: " + user.username);
+    theStatusCode = 503;
+    msg = `Error`;
+    myEmitter.emit("status", msg, theStatusCode);
     res.render("503.ejs");
-    // log this error to an error log file.
   }
 });
 
@@ -87,6 +89,9 @@ router.post("/new", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    theStatusCode = 503;
+    msg = `Error`;
+    myEmitter.emit("status", msg, theStatusCode);
     res.render("503.ejs");
     // log this error to an error log file.
   }
