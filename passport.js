@@ -1,9 +1,13 @@
 const bcrypt = require("bcrypt");
+// This will bring in the "passport" npm package for use in this file
 const passport = require("passport");
+// This will bring in the "passport-local" npm package for use in this file and .Strategy is a method within the package
 const localStrategy = require("passport-local").Strategy;
 const flash = require("express-flash");
 const session = require("express-session");
 const logins = require("./services/auth.dal");
+
+// Passport is an authentication middleware for Node.js applications. Allow authentication of users while running the application by using authentication strategies such as local authentication (username and password)
 
 passport.use(
   new localStrategy(
