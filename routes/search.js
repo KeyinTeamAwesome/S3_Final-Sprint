@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
+// pp is the passport.js file used to check if the user is authenticated
 const pp = require("../passport");
 const searchDal = require("../services/search.dal");
 const authDal = require("../services/auth.dal");
+// This will bring in the "passport" npm package for use in this file
 const passport = require("passport");
-const localStrategy = require("passport-local").Strategy;
 
 // This will bring in the "fs" or file structure global object no npm install required
 const fs = require("fs");
@@ -63,6 +64,7 @@ router.get("/", async (req, res) => {
       req.query.database
     );
     theDatabase = req.query.database;
+    // .passport.user is the user id that is stored in the current session
     msg = `User ID: ${req.session.passport.user} Search Term: ${req.query.searchTerm}`;
     myEmitter.emit("query", msg, theDatabase);
 
