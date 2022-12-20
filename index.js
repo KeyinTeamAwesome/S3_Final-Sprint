@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV !== "production") {
-	require("dotenv").config();
+  require("dotenv").config();
 }
 const express = require("express");
 const bcrypt = require("bcrypt");
@@ -19,11 +19,11 @@ app.use(express.urlencoded({ extended: true })); //THIS MAY BE TRUE OR FALSE??
 app.use(express.static(__dirname + "/public"));
 app.use(flash());
 app.use(
-	session({
-		secret: process.env.SESSION_SECRET,
-		resave: false,
-		saveUninitialized: false,
-	})
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -33,8 +33,8 @@ app.use(methodOverride("_method"));
 // For every route we check the person is logged in. If not we send them
 // LOCALHOST STARTS HERE to the login page
 app.get("/", pp.checkNotAuthenticated, (req, res) => {
-	res.render("index.ejs");
-	// res.render("index.ejs", { name: req.user.username });
+  res.render("index.ejs");
+  // res.render("index.ejs", { name: req.user.username });
 });
 
 const searchRouter = require("./routes/search");
@@ -47,49 +47,53 @@ app.use("/auth", authRouter);
 // This middleware is only for the login and register. If someone stumbles
 // upon these routes they only need access if they are NOT authenticated.
 app.get("/login", pp.checkNotAuthenticated, (req, res) => {
-	res.render("login.ejs");
+  res.render("login.ejs");
 });
 app.post(
-	"/login",
-	pp.checkNotAuthenticated,
-	passport.authenticate("local", {
-		successRedirect: "/search",
-		failureRedirect: "/login",
-		failureFlash: true,
-	})
+  "/login",
+  pp.checkNotAuthenticated,
+  passport.authenticate("local", {
+    successRedirect: "/search",
+    failureRedirect: "/login",
+    failureFlash: true,
+  })
 );
 app.get("/register", pp.checkNotAuthenticated, (req, res) => {
-	res.render("register.ejs");
+  res.render("register.ejs");
 });
 app.post("/register", pp.checkNotAuthenticated, async (req, res) => {
-	try {
-		const hashedPassword = await bcrypt.hash(req.body.password, 10);
-		let result = await logins.addLogin(
-			req.body.name,
-			req.body.email,
-			hashedPassword,
-			uuid.v4()
-		);
-		res.redirect("/login");
-	} catch (error) {
-		console.log(error);
-		res.redirect("/register");
-	}
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    let result = await logins.addLogin(
+      req.body.name,
+      req.body.email,
+      hashedPassword,
+      uuid.v4()
+    );
+    res.redirect("/login");
+  } catch (error) {
+    console.log(error);
+    res.redirect("/register");
+  }
 });
 
 app.delete("/logout", function (req, res, next) {
-	req.logout(function (err) {
-		if (err) {
-			return next(err);
-		}
-		res.redirect("/login");
-	});
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/login");
+  });
 });
 
 app.use((req, res) => {
-	res.status(404).render("404.ejs");
+  res.status(404).render("404.ejs");
+});
+
+app.use((req, res) => {
+  res.status(503).render("503.ejs");
 });
 
 app.listen(PORT, () => {
-	console.log(`Simple app running on port ${PORT}.`);
+  console.log(`Simple app running on port ${PORT}.`);
 });
